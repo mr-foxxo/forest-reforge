@@ -1,0 +1,27 @@
+services:
+  viewer:
+    platform: linux/386
+    build:
+      context: .
+      args:
+        VIEWER_BASE_IMAGE: ${VIEWER_BASE_IMAGE:?Set a reviewed i386 Debian image digest}
+        JDK_SHA256: ${JDK_SHA256:?Set the private i386 JDK8 archive checksum}
+    ports:
+      - "127.0.0.1:5900:5900"
+    volumes:
+      - ./private/runtime:/runtime:ro
+      - viewer-state:/state
+    secrets: [vnc_password]
+    tmpfs:
+      - "/tmp:mode=1777"
+    read_only: true
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: [ALL]
+    shm_size: 128mb
+    restart: "no"
+secrets:
+  vnc_password:
+    file: ./private/vnc-password
+volumes:
+  viewer-state:
+

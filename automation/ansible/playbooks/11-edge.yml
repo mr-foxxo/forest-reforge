@@ -1,0 +1,7 @@
+---
+- name: Gatehouse - one outbound application tunnel
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  roles: [edge]
+

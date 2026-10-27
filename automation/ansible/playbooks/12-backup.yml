@@ -1,0 +1,6 @@
+---
+- name: Lookout - private cluster recovery material
+  hosts: control_plane
+  become: true
+  roles: [backup]
+

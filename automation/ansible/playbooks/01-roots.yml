@@ -1,0 +1,6 @@
+---
+- name: Roots - prepare dedicated Debian or Ubuntu Kubernetes guests
+  hosts: canopy
+  become: true
+  roles: [roots]
+

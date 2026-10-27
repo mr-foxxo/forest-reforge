@@ -1,0 +1,11 @@
+[Unit]
+Description=Refresh a namespace-scoped ECR image pull Secret
+After=network-online.target
+Wants=network-online.target
+[Service]
+Type=oneshot
+User=platform
+UMask=0077
+# Configure the user's kubeconfig and renewable AWS profile privately first.
+ExecStart=/opt/forest-reforge/scripts/ecr-refresh.sh apply core operator us-east-1 123456789012.dkr.ecr.us-east-1.amazonaws.com backstage ecr-pull
+

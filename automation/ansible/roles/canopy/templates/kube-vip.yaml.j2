@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kube-vip
+  namespace: kube-system
+spec:
+  hostNetwork: true
+  priorityClassName: system-node-critical
+  containers:
+    - name: kube-vip
+      image: {{ reforge_kube_vip_image | to_json }}
+      args: [manager]
+      env:
+        - {name: vip_arp, value: "true"}
+        - {name: port, value: "6443"}
+        - {name: vip_cidr, value: "32"}
+        - {name: cp_enable, value: "true"}
+        - {name: svc_enable, value: "false"}
+        - {name: vip_leaderelection, value: {{ (not reforge_vip_bootstrap) | string | lower | to_json }}}
+        - {name: vip_interface, value: {{ reforge_node_interface | to_json }}}
+        - {name: address, value: {{ reforge_api_vip | to_json }}}
+      securityContext:
+        capabilities:
+          add: [NET_ADMIN, NET_RAW]
+      volumeMounts:
+        - {name: kubeconfig, mountPath: /etc/kubernetes/admin.conf}
+  volumes:
+    - name: kubeconfig
+      hostPath:
+        path: {{ '/etc/kubernetes/super-admin.conf' if reforge_vip_bootstrap else '/etc/kubernetes/reforge/vip.conf' }}
+        type: FileOrCreate
+

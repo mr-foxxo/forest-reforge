@@ -1,0 +1,32 @@
+---
+- name: Validate operator intent
+  ansible.builtin.include_role:
+    name: contract
+- name: Require explicit DNS listen address and authoritative local records
+  ansible.builtin.assert:
+    that:
+      - reforge_dns_listen | default('') | length > 0
+      - reforge_dns_records | default([]) | length > 0
+      - reforge_dns_upstreams | default([]) | length > 0
+- name: Install standalone dnsmasq
+  ansible.builtin.apt:
+    name: dnsmasq
+    update_cache: true
+    state: present
+- name: Configure split DNS without DHCP
+  ansible.builtin.template:
+    src: dnsmasq.conf.j2
+    dest: /etc/dnsmasq.d/reforge.conf
+    mode: '0644'
+    backup: true
+  notify: Restart dnsmasq
+- name: Validate complete dnsmasq configuration
+  ansible.builtin.command: dnsmasq --test
+  changed_when: false
+  when: not ansible_check_mode
+- name: Enable independent DNS
+  ansible.builtin.systemd:
+    name: dnsmasq
+    enabled: true
+    state: started
+

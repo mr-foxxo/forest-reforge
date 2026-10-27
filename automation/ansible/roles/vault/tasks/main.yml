@@ -1,0 +1,119 @@
+---
+- name: Validate cluster contract
+  ansible.builtin.include_role:
+    name: cluster_contract
+- name: Require explicit OpenEBS version and dedicated hostpath
+  ansible.builtin.assert:
+    that:
+      - reforge_openebs_version is match('^[0-9]+\.[0-9]+\.[0-9]+$')
+      - reforge_localpv_path is match('^/var/(local|lib)/reforge/[a-z0-9/-]+$')
+- name: Install LocalPV only; replicated engines and LVM are explicit future choices
+  kubernetes.core.helm:
+    kubeconfig: "{{ reforge_kubeconfig }}"
+    release_name: openebs
+    release_namespace: openebs
+    create_namespace: true
+    chart_ref: openebs
+    chart_repo_url: https://openebs.github.io/openebs
+    chart_version: "{{ reforge_openebs_version }}"
+    release_values:
+      engines:
+        local:
+          lvm: {enabled: false}
+          zfs: {enabled: false}
+        replicated:
+          mayastor: {enabled: false}
+      localpv-provisioner:
+        hostpathClass:
+          enabled: false
+    atomic: true
+    wait: true
+    timeout: 10m
+- name: Create non-default retain-on-delete node-local StorageClass
+  kubernetes.core.k8s:
+    kubeconfig: "{{ reforge_kubeconfig }}"
+    definition:
+      apiVersion: storage.k8s.io/v1
+      kind: StorageClass
+      metadata:
+        name: "{{ reforge_storage_class }}"
+        annotations:
+          openebs.io/cas-type: local
+          cas.openebs.io/config: |
+            - name: StorageType
+              value: hostpath
+            - name: BasePath
+              value: {{ reforge_localpv_path }}
+      provisioner: openebs.io/local
+      reclaimPolicy: Retain
+      volumeBindingMode: WaitForFirstConsumer
+    apply: true
+- name: Configure optional LocalPV LVM using already prepared volume groups
+  when: reforge_lvm_enabled | bool
+  block:
+    - name: Require LVM release pin and explicit inventory nodes
+      ansible.builtin.assert:
+        that:
+          - reforge_lvm_chart_version is match('^[0-9]+\.[0-9]+\.[0-9]+$')
+          - reforge_lvm_volume_group is match('^[a-zA-Z0-9][a-zA-Z0-9_-]+$')
+          - reforge_lvm_nodes | length > 0
+          - reforge_lvm_nodes | difference(groups['canopy']) | length == 0
+    - name: Verify the selected existing volume group on every storage node
+      ansible.builtin.command:
+        argv: [vgs, --noheadings, -o, vg_name, "{{ reforge_lvm_volume_group }}"]
+      delegate_to: "{{ item }}"
+      become: true
+      changed_when: false
+      check_mode: false
+      loop: "{{ reforge_lvm_nodes }}"
+    - name: Label existing storage nodes for CSI placement and topology
+      kubernetes.core.k8s:
+        kubeconfig: "{{ reforge_kubeconfig }}"
+        state: patched
+        definition:
+          apiVersion: v1
+          kind: Node
+          metadata:
+            name: "{{ item }}"
+            labels:
+              reforge-lvm: 'true'
+              openebs.io/nodename: "{{ item }}"
+      loop: "{{ reforge_lvm_nodes }}"
+    - name: Install LVM CSI without preparing or wiping devices
+      kubernetes.core.helm:
+        kubeconfig: "{{ reforge_kubeconfig }}"
+        release_name: localpv-lvm
+        release_namespace: openebs
+        create_namespace: true
+        chart_ref: lvm-localpv
+        chart_repo_url: https://openebs.github.io/lvm-localpv
+        chart_version: "{{ reforge_lvm_chart_version }}"
+        release_values:
+          lvmNode:
+            nodeSelector:
+              reforge-lvm: 'true'
+        wait: true
+        atomic: true
+        timeout: 10m
+    - name: Create non-default topology-restricted LVM class
+      kubernetes.core.k8s:
+        kubeconfig: "{{ reforge_kubeconfig }}"
+        definition:
+          apiVersion: storage.k8s.io/v1
+          kind: StorageClass
+          metadata:
+            name: reforge-lvm
+          provisioner: local.csi.openebs.io
+          parameters:
+            storage: lvm
+            volgroup: "{{ reforge_lvm_volume_group }}"
+            fsType: ext4
+          reclaimPolicy: Retain
+          volumeBindingMode: WaitForFirstConsumer
+          allowVolumeExpansion: true
+          allowedTopologies:
+            - matchLabelExpressions:
+                - key: openebs.io/nodename
+                  values: "{{ reforge_lvm_nodes }}"
+        apply: true
+

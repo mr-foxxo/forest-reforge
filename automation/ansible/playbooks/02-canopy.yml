@@ -1,0 +1,22 @@
+---
+- name: Canopy - bootstrap first control plane
+  hosts: control_plane[0]
+  become: true
+  roles: [canopy]
+
+- name: Canopy - join control planes sequentially
+  hosts: control_plane
+  serial: 1
+  become: true
+  tasks:
+    - name: Join additional control planes
+      ansible.builtin.include_role:
+        name: canopy_join
+      when: inventory_hostname != groups['control_plane'][0]
+
+- name: Canopy - join workers sequentially
+  hosts: workers
+  serial: 1
+  become: true
+  roles: [canopy_join]
+

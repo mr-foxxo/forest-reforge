@@ -1,0 +1,7 @@
+---
+- name: Reload backup timer
+  ansible.builtin.systemd:
+    name: reforge-backup.timer
+    daemon_reload: true
+    state: restarted
+

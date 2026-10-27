@@ -1,0 +1,95 @@
+---
+- name: Validate cluster contract
+  ansible.builtin.include_role:
+    name: cluster_contract
+- name: Require monitoring release pin
+  ansible.builtin.assert:
+    that: reforge_monitoring_version is match('^[0-9]+\.[0-9]+\.[0-9]+$')
+- name: Install Prometheus, Alertmanager and private Grafana
+  kubernetes.core.helm:
+    kubeconfig: "{{ reforge_kubeconfig }}"
+    release_name: lookout
+    release_namespace: monitoring
+    create_namespace: true
+    chart_ref: kube-prometheus-stack
+    chart_repo_url: https://prometheus-community.github.io/helm-charts
+    chart_version: "{{ reforge_monitoring_version }}"
+    release_values:
+      grafana:
+        service: {type: ClusterIP}
+        ingress: {enabled: false}
+        persistence:
+          enabled: true
+          storageClassName: "{{ reforge_monitoring_storage_class }}"
+          size: 5Gi
+      prometheus:
+        prometheusSpec:
+          retention: 7d
+          storageSpec:
+            volumeClaimTemplate:
+              spec:
+                storageClassName: "{{ reforge_monitoring_storage_class }}"
+                accessModes: [ReadWriteOnce]
+                resources:
+                  requests:
+                    storage: "{{ reforge_monitoring_size }}"
+      alertmanager:
+        alertmanagerSpec:
+          storage:
+            volumeClaimTemplate:
+              spec:
+                storageClassName: "{{ reforge_monitoring_storage_class }}"
+                accessModes: [ReadWriteOnce]
+                resources:
+                  requests: {storage: 2Gi}
+    atomic: true
+    wait: true
+    timeout: 15m
+- name: Install optional External Secrets controller
+  when: reforge_external_secrets_enabled | bool
+  block:
+    - name: Require operator version
+      ansible.builtin.assert:
+        that: reforge_external_secrets_version is match('^[0-9]+\.[0-9]+\.[0-9]+$')
+    - name: Install operator without inventing a credential backend
+      kubernetes.core.helm:
+        kubeconfig: "{{ reforge_kubeconfig }}"
+        release_name: external-secrets
+        release_namespace: external-secrets
+        create_namespace: true
+        chart_ref: external-secrets
+        chart_repo_url: https://charts.external-secrets.io
+        chart_version: "{{ reforge_external_secrets_version }}"
+        release_values: {installCRDs: true}
+        atomic: true
+        wait: true
+        timeout: 10m
+- name: Install optional explicitly configured logging stack
+  when: reforge_logging_enabled | bool
+  block:
+    - name: Require both logging pins and reviewed private values
+      ansible.builtin.assert:
+        that:
+          - reforge_loki_version is match('^[0-9]+\.[0-9]+\.[0-9]+$')
+          - reforge_alloy_version is match('^[0-9]+\.[0-9]+\.[0-9]+$')
+          - reforge_loki_values_file is match('^/')
+          - reforge_alloy_values_file is match('^/')
+    - name: Install Loki and Alloy using reviewed storage and retention decisions
+      kubernetes.core.helm:
+        kubeconfig: "{{ reforge_kubeconfig }}"
+        release_name: "{{ item.name }}"
+        release_namespace: logging
+        create_namespace: true
+        chart_ref: "{{ item.name }}"
+        chart_repo_url: https://grafana.github.io/helm-charts
+        chart_version: "{{ item.version }}"
+        release_values: "{{ lookup('file', item.file) | from_yaml }}"
+        atomic: true
+        wait: true
+        timeout: 15m
+      loop:
+        - {name: loki, version: "{{ reforge_loki_version }}", file: "{{ reforge_loki_values_file }}"}
+        - {name: alloy, version: "{{ reforge_alloy_version }}", file: "{{ reforge_alloy_values_file }}"}
+      no_log: true
+      diff: false
+

@@ -1,0 +1,6 @@
+---
+- name: Names - independent split DNS
+  hosts: names
+  become: true
+  roles: [names]
+

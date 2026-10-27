@@ -1,0 +1,113 @@
+---
+- name: Validate operator intent
+  ansible.builtin.include_role:
+    name: contract
+- name: Require dedicated Debian or Ubuntu guests and explicit version tuple
+  ansible.builtin.assert:
+    that:
+      - ansible_distribution in ['Debian', 'Ubuntu']
+      - "inventory_hostname not in groups.get('burrows', [])"
+      - reforge_node_ip | length > 0
+      - reforge_node_ip in ansible_all_ipv4_addresses
+      - reforge_kubernetes_minor is match('^v1\.[0-9]+$')
+      - reforge_kubernetes_version is match('^v1\.[0-9]+\.[0-9]+$')
+      - reforge_kubernetes_package_version is match('^[0-9].*-.*$')
+      - reforge_containerd_package_version | length > 0
+      - reforge_pause_image is match('^.+@sha256:[a-f0-9]{64}$')
+      - reforge_kubernetes_version.startswith(reforge_kubernetes_minor + '.')
+      - reforge_kubernetes_minor[3:] | int >= 31
+      - reforge_kubernetes_package_version.startswith(reforge_kubernetes_version[1:] + '-')
+- name: Disable active swap on dedicated guests
+  ansible.builtin.command: swapoff -a
+  when: ansible_swaptotal_mb | int > 0
+  changed_when: true
+- name: Disable fstab swap entries
+  ansible.builtin.replace:
+    path: /etc/fstab
+    regexp: '^([^#\n].*\s+swap\s+.*)$'
+    replace: '# reforge disabled swap: \1'
+    backup: true
+- name: Install OS dependencies
+  ansible.builtin.apt:
+    name: [ca-certificates, curl, gpg, python3, python3-debian, socat, conntrack]
+    update_cache: true
+    state: present
+- name: Create key and runtime directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop: [/etc/apt/keyrings, /etc/containerd]
+- name: Load Kubernetes modules persistently
+  ansible.builtin.copy:
+    dest: /etc/modules-load.d/reforge-canopy.conf
+    mode: '0644'
+    content: |
+      overlay
+      br_netfilter
+- name: Load modules now
+  community.general.modprobe:
+    name: "{{ item }}"
+  loop: [overlay, br_netfilter]
+- name: Set forwarding for Kubernetes
+  ansible.posix.sysctl:
+    name: "{{ item }}"
+    value: '1'
+    sysctl_file: /etc/sysctl.d/90-reforge-canopy.conf
+    reload: true
+  loop: [net.ipv4.ip_forward, net.bridge.bridge-nf-call-iptables, net.bridge.bridge-nf-call-ip6tables]
+- name: Install distribution containerd at an explicit version
+  ansible.builtin.apt:
+    name: "containerd={{ reforge_containerd_package_version }}"
+    state: present
+- name: Inspect selected containerd version
+  ansible.builtin.command: containerd --version
+  register: reforge_containerd_version
+  changed_when: false
+  check_mode: false
+- name: Require containerd 1.x config API
+  ansible.builtin.assert:
+    that: "' 1.' in reforge_containerd_version.stdout"
+    fail_msg: This role uses containerd config v2; port and qualify separately for containerd 2.x.
+- name: Configure CRI with systemd cgroups
+  ansible.builtin.template:
+    src: containerd.toml.j2
+    dest: /etc/containerd/config.toml
+    mode: '0644'
+    backup: true
+  notify: Restart containerd
+- name: Download Kubernetes signing key through TLS
+  ansible.builtin.get_url:
+    url: "https://pkgs.k8s.io/core:/stable:/{{ reforge_kubernetes_minor }}/deb/Release.key"
+    dest: /etc/apt/keyrings/reforge-kubernetes.asc
+    mode: '0644'
+- name: Configure selected Kubernetes minor repository
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/reforge-kubernetes.asc] https://pkgs.k8s.io/core:/stable:/{{ reforge_kubernetes_minor }}/deb/ /"
+    filename: reforge-kubernetes
+- name: Install exact Kubernetes packages (holds prevent accidental upgrades)
+  ansible.builtin.apt:
+    name: "{{ item }}={{ reforge_kubernetes_package_version }}"
+    state: present
+    update_cache: true
+  loop: [kubelet, kubeadm, kubectl]
+- name: Hold runtime and Kubernetes packages
+  ansible.builtin.dpkg_selections:
+    name: "{{ item }}"
+    selection: hold
+  loop: [containerd, kubelet, kubeadm, kubectl]
+- name: Set explicit kubelet node address
+  ansible.builtin.copy:
+    dest: /etc/default/kubelet
+    mode: '0644'
+    content: 'KUBELET_EXTRA_ARGS=--node-ip={{ reforge_node_ip }}'
+  notify: Restart kubelet
+- name: Flush runtime changes before kubeadm
+  ansible.builtin.meta: flush_handlers
+- name: Enable runtime and kubelet (kubelet initializes after kubeadm)
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    enabled: true
+    state: started
+  loop: [containerd, kubelet]
+

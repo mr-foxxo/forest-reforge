@@ -1,0 +1,11 @@
+# Private source drop: never include the original inventory, vault or artifacts.
+reference/
+.idea/
+local/
+dist/
+.venv/
+**/__pycache__/
+*.retry
+.env
+*.tfstate*
+

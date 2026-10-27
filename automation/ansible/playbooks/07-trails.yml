@@ -1,0 +1,7 @@
+---
+- name: Trails - Argo CD, GitHub identity and scoped GitOps root
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  roles: [trails]
+

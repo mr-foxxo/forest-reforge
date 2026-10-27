@@ -1,0 +1,38 @@
+---
+- name: Validate operator intent
+  ansible.builtin.include_role:
+    name: contract
+- name: Require an absolute dedicated backup root
+  ansible.builtin.assert:
+    that: reforge_backup_root is match('^/var/backups/reforge(/[a-zA-Z0-9_-]+)*$')
+- name: Check matching etcd tools are already installed
+  ansible.builtin.command:
+    argv: ["{{ item }}", version]
+  loop: [etcdctl, etcdutl]
+  changed_when: false
+  check_mode: false
+- name: Install transport and locking dependencies
+  ansible.builtin.apt:
+    name: [rsync, openssh-client, util-linux]
+    state: present
+- name: Install recovery collector
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/../../../scripts/etcd-backup.sh"
+    dest: /usr/local/sbin/reforge-etcd-backup
+    owner: root
+    group: root
+    mode: '0700'
+- name: Install backup configuration and units
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "{{ '/etc/reforge-backup.env' if item == 'backup.env' else '/etc/systemd/system/reforge-backup.' ~ item }}"
+    mode: '0600'
+  loop: [backup.env, service, timer]
+  notify: Reload backup timer
+- name: Enable backup timer
+  ansible.builtin.systemd:
+    name: reforge-backup.timer
+    daemon_reload: true
+    enabled: true
+    state: started
+

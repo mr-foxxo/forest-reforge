@@ -1,0 +1,42 @@
+---
+- name: Validate cluster contract
+  ansible.builtin.include_role:
+    name: cluster_contract
+- name: Require exact chart pin and scoped GitOps source
+  ansible.builtin.assert:
+    that:
+      - reforge_argocd_version is match('^[0-9]+\.[0-9]+\.[0-9]+$')
+      - reforge_gitops_repo is match('^https://[^ ]+\.git$')
+      - reforge_gitops_revision is match('^[a-f0-9]{40}$')
+      - reforge_gitops_path is match('^[a-zA-Z0-9_/-]+$')
+      - reforge_gitops_destinations | length > 0
+- name: Require separate GitHub OAuth credential when SSO is selected
+  ansible.builtin.assert:
+    that:
+      - reforge_github_org != 'example-org'
+      - reforge_argocd_oauth_client_id | length > 0
+      - reforge_argocd_oauth_client_secret | length > 0
+      - reforge_argocd_admin_teams | length > 0
+  when: reforge_argocd_sso | bool
+  no_log: true
+- name: Install Argo CD with private ClusterIP service and optional GitHub Dex
+  kubernetes.core.helm:
+    kubeconfig: "{{ reforge_kubeconfig }}"
+    release_name: argocd
+    release_namespace: argocd
+    create_namespace: true
+    chart_ref: argo-cd
+    chart_repo_url: https://argoproj.github.io/argo-helm
+    chart_version: "{{ reforge_argocd_version }}"
+    release_values: "{{ lookup('template', 'values.yaml.j2') | from_yaml }}"
+    wait: true
+    atomic: true
+    timeout: 15m
+  no_log: true
+  diff: false
+- name: Install root project and manually synced root application
+  kubernetes.core.k8s:
+    kubeconfig: "{{ reforge_kubeconfig }}"
+    definition: "{{ lookup('template', 'root.yaml.j2') | from_yaml_all | list }}"
+    apply: true
+

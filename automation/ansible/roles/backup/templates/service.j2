@@ -1,0 +1,12 @@
+[Unit]
+Description=Forest Reforge private etcd recovery bundle
+After=network-online.target
+Wants=network-online.target
+[Service]
+Type=oneshot
+User=root
+UMask=0077
+EnvironmentFile=/etc/reforge-backup.env
+ExecStart=/usr/local/sbin/reforge-etcd-backup --apply
+Nice=10
+

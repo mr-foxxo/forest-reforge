@@ -1,0 +1,7 @@
+---
+- name: Lookout - monitoring, optional secrets and logging controllers
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  roles: [lookout]
+

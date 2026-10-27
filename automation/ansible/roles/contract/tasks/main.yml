@@ -1,0 +1,9 @@
+---
+- name: Require a deliberately reviewed private inventory
+  ansible.builtin.assert:
+    that:
+      - reforge_inventory_reviewed | default(false) | bool
+      - reforge_site is match('^[a-z][a-z0-9-]*$')
+      - reforge_cluster is match('^[a-z][a-z0-9-]*$')
+    fail_msg: Copy the examples to local/, select versions and review the inventory first.
+

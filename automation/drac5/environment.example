@@ -1,0 +1,4 @@
+# Copy to .env privately. The JDK archive stays in private/jdk8-i386.tar.gz.
+VIEWER_BASE_IMAGE=
+JDK_SHA256=
+

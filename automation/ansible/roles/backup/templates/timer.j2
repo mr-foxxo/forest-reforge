@@ -1,0 +1,9 @@
+[Unit]
+Description=Forest Reforge snapshot schedule
+[Timer]
+OnCalendar={{ reforge_backup_calendar }}
+RandomizedDelaySec=15m
+Persistent=true
+[Install]
+WantedBy=timers.target
+

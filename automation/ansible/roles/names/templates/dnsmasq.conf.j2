@@ -1,0 +1,14 @@
+# Dedicated DNS host; firewall TCP/UDP 53 to approved client networks.
+bind-dynamic
+listen-address=127.0.0.1,{{ reforge_dns_listen }}
+no-resolv
+domain-needed
+bogus-priv
+local=/{{ reforge_internal_domain }}/
+{% for upstream in reforge_dns_upstreams %}
+server={{ upstream }}
+{% endfor %}
+{% for record in reforge_dns_records %}
+host-record={{ record.name }},{{ record.address }}
+{% endfor %}
+

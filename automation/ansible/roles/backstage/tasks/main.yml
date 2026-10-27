@@ -1,0 +1,61 @@
+---
+- name: Validate cluster contract
+  ansible.builtin.include_role:
+    name: cluster_contract
+- name: Require reviewed app image, catalog organization and database
+  ansible.builtin.assert:
+    that:
+      - reforge_backstage_image is match('^.+@sha256:[a-f0-9]{64}$')
+      - reforge_github_org != 'example-org'
+      - reforge_backstage_oauth_client_id | length > 0
+      - reforge_backstage_oauth_client_secret | length > 0
+      - reforge_backstage_github_token | length > 0
+      - reforge_backstage_database_host | length > 0
+      - reforge_backstage_database_password | length > 0
+      - reforge_backstage_database_cidr | default('') | length > 0
+      - not reforge_backstage_database_ssl | bool or reforge_backstage_database_ca_file | length > 0
+  no_log: true
+- name: Create application namespace and allow Gateway attachment
+  kubernetes.core.k8s:
+    kubeconfig: "{{ reforge_kubeconfig }}"
+    definition:
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: backstage
+        labels: {reforge-gateway: "true", pod-security.kubernetes.io/enforce: restricted}
+- name: Install Backstage runtime credentials separately from configuration
+  kubernetes.core.k8s:
+    kubeconfig: "{{ reforge_kubeconfig }}"
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata: {name: backstage-runtime, namespace: backstage}
+      type: Opaque
+      data:
+        GITHUB_CLIENT_SECRET: "{{ reforge_backstage_oauth_client_secret | b64encode }}"
+        GITHUB_TOKEN: "{{ reforge_backstage_github_token | b64encode }}"
+        POSTGRES_PASSWORD: "{{ reforge_backstage_database_password | b64encode }}"
+        POSTGRES_CA: "{{ lookup('file', reforge_backstage_database_ca_file) | b64encode if reforge_backstage_database_ssl else '' }}"
+  register: reforge_backstage_secret_result
+  no_log: true
+  diff: false
+- name: Install Backstage config and application resources
+  kubernetes.core.k8s:
+    kubeconfig: "{{ reforge_kubeconfig }}"
+    definition: "{{ lookup('template', 'backstage.yaml.j2') | from_yaml_all | list }}"
+    apply: true
+  register: reforge_backstage_resources_result
+- name: Restart application after configuration or credential changes
+  ansible.builtin.command:
+    argv: [kubectl, --kubeconfig, "{{ reforge_kubeconfig }}", -n, backstage, rollout, restart, deployment/backstage]
+  changed_when: true
+  when:
+    - not ansible_check_mode
+    - reforge_backstage_secret_result.changed or reforge_backstage_resources_result.changed
+- name: Validate application rollout
+  ansible.builtin.command:
+    argv: [kubectl, --kubeconfig, "{{ reforge_kubeconfig }}", -n, backstage, rollout, status, deployment/backstage, --timeout=300s]
+  changed_when: false
+  when: not ansible_check_mode
+

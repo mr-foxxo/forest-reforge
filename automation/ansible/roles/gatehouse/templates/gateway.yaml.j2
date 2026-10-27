@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ reforge_gateway_namespace }}
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: reforge-acme
+spec:
+  acme:
+    email: {{ reforge_acme_email | to_json }}
+    server: {{ 'https://acme-v02.api.letsencrypt.org/directory' if reforge_acme_production else 'https://acme-staging-v02.api.letsencrypt.org/directory' }}
+    privateKeySecretRef:
+      name: {{ 'reforge-acme-production' if reforge_acme_production else 'reforge-acme-staging' }}
+    solvers:
+      - selector:
+          dnsZones: [{{ reforge_dns01_zone | to_json }}]
+        dns01:
+          cloudflare:
+            apiTokenSecretRef: {name: cloudflare-dns, key: api-token}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: core-private
+  namespace: {{ reforge_gateway_namespace }}
+spec:
+  secretName: core-private-tls
+  issuerRef: {name: reforge-acme, kind: ClusterIssuer}
+  dnsNames: {{ reforge_tls_names | to_json }}
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: {{ reforge_gateway_name }}
+  namespace: {{ reforge_gateway_namespace }}
+spec:
+  gatewayClassName: cilium
+  addresses:
+    - {type: IPAddress, value: {{ reforge_gateway_ip | to_json }}}
+  listeners:
+    - name: https
+      protocol: HTTPS
+      port: 443
+      tls:
+        mode: Terminate
+        certificateRefs: [{name: core-private-tls}]
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels: {reforge-gateway: "true"}
+

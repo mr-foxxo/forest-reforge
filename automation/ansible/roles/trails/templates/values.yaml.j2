@@ -1,0 +1,40 @@
+global:
+  domain: {{ ('argocd.' ~ reforge_internal_domain) | to_json }}
+configs:
+  cm:
+    url: {{ ('https://argocd.' ~ reforge_internal_domain) | to_json }}
+    admin.enabled: "true"
+{% if reforge_argocd_sso %}
+    dex.config: |
+      connectors:
+        - type: github
+          id: github
+          name: GitHub
+          config:
+            clientID: {{ reforge_argocd_oauth_client_id | to_json }}
+            clientSecret: $dex.github.clientSecret
+            teamNameField: slug
+            orgs:
+              - name: {{ reforge_github_org | to_json }}
+  secret:
+    extra:
+      dex.github.clientSecret: {{ reforge_argocd_oauth_client_secret | to_json }}
+{% endif %}
+  params:
+    server.insecure: "false"
+  rbac:
+    policy.default: role:reforge-no-access
+    scopes: '[groups]'
+    policy.csv: |
+{% for team in reforge_argocd_admin_teams %}
+      g, {{ reforge_github_org }}:{{ team }}, role:admin
+{% endfor %}
+{% for team in reforge_argocd_readonly_teams %}
+      g, {{ reforge_github_org }}:{{ team }}, role:readonly
+{% endfor %}
+server:
+  service: {type: ClusterIP}
+  ingress: {enabled: false}
+dex:
+  enabled: {{ reforge_argocd_sso | bool | lower }}
+

@@ -1,0 +1,6 @@
+---
+- name: Burrows - explicitly selected IOMMU boot configuration
+  hosts: burrows
+  become: true
+  roles: [burrows]
+

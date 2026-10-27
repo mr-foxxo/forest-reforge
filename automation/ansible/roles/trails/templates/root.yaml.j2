@@ -1,0 +1,46 @@
+# The root is a trusted platform-admin repository. It can define child projects.
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: reforge-bootstrap
+  namespace: argocd
+spec:
+  sourceRepos: [{{ reforge_gitops_repo | to_json }}]
+  destinations: [{namespace: argocd, server: 'https://kubernetes.default.svc'}]
+  namespaceResourceWhitelist:
+    - {group: argoproj.io, kind: Application}
+    - {group: argoproj.io, kind: AppProject}
+  clusterResourceWhitelist: []
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: reforge-apps
+  namespace: argocd
+spec:
+  sourceRepos: [{{ reforge_gitops_repo | to_json }}]
+  destinations: {{ reforge_gitops_destinations | to_json }}
+  clusterResourceWhitelist: []
+  namespaceResourceBlacklist:
+    - {group: rbac.authorization.k8s.io, kind: RoleBinding}
+    - {group: rbac.authorization.k8s.io, kind: Role}
+    - {group: argoproj.io, kind: AppProject}
+    - {group: argoproj.io, kind: Application}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ (reforge_site ~ '-platform') | to_json }}
+  namespace: argocd
+spec:
+  project: reforge-bootstrap
+  source:
+    repoURL: {{ reforge_gitops_repo | to_json }}
+    targetRevision: {{ reforge_gitops_revision | to_json }}
+    path: {{ reforge_gitops_path | to_json }}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    syncOptions: [CreateNamespace=false]
+

@@ -1,0 +1,7 @@
+---
+- name: Gatehouse - ACME and private HTTPS Gateway
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  roles: [gatehouse]
+

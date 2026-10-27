@@ -1,0 +1,64 @@
+---
+- name: Validate operator intent
+  ansible.builtin.include_role:
+    name: contract
+- name: Inspect joined node
+  ansible.builtin.stat:
+    path: /etc/kubernetes/kubelet.conf
+  register: reforge_joined
+- name: Join fresh node using short-lived authenticated discovery
+  when: not reforge_joined.stat.exists and not ansible_check_mode
+  block:
+    - name: Mint a 15 minute join command on original control plane
+      ansible.builtin.command:
+        argv: [kubeadm, token, create, --ttl, 15m, --print-join-command, --kubeconfig, /etc/kubernetes/admin.conf]
+      delegate_to: "{{ groups['control_plane'][0] }}"
+      register: reforge_join_command
+      changed_when: true
+      no_log: true
+    - name: Prepare additional control plane
+      when: inventory_hostname in groups['control_plane']
+      block:
+        - name: Create private encryption directory
+          ansible.builtin.file:
+            path: /etc/kubernetes/reforge
+            state: directory
+            mode: '0700'
+        - name: Read original encryption configuration
+          ansible.builtin.slurp:
+            src: /etc/kubernetes/reforge/encryption.yaml
+          delegate_to: "{{ groups['control_plane'][0] }}"
+          register: reforge_source_encryption
+          no_log: true
+        - name: Replicate original encryption configuration before join
+          ansible.builtin.copy:
+            content: "{{ reforge_source_encryption.content | b64decode }}"
+            dest: /etc/kubernetes/reforge/encryption.yaml
+            mode: '0600'
+          no_log: true
+          diff: false
+        - name: Upload certificates with a new temporary key
+          ansible.builtin.command:
+            argv: [kubeadm, init, phase, upload-certs, --upload-certs, --kubeconfig, /etc/kubernetes/admin.conf]
+          delegate_to: "{{ groups['control_plane'][0] }}"
+          register: reforge_upload_certs
+          changed_when: true
+          no_log: true
+    - name: Join using explicit node address and name
+      ansible.builtin.command:
+        argv: "{{ reforge_join_command.stdout.split() + ['--node-name', inventory_hostname, '--cri-socket', 'unix:///run/containerd/containerd.sock'] + (['--control-plane', '--apiserver-advertise-address', reforge_node_ip, '--certificate-key', reforge_upload_certs.stdout_lines[-1]] if inventory_hostname in groups['control_plane'] else []) }}"
+        creates: /etc/kubernetes/kubelet.conf
+      no_log: true
+    - name: Install steady-state VIP on added control plane
+      ansible.builtin.include_role:
+        name: canopy
+      when: inventory_hostname in groups['control_plane']
+  always:
+    - name: Revoke this join token even if join fails
+      ansible.builtin.command:
+        argv: [kubeadm, token, delete, "{{ reforge_join_command.stdout.split()[reforge_join_command.stdout.split().index('--token') + 1].split('.')[0] }}"]
+      delegate_to: "{{ groups['control_plane'][0] }}"
+      when: reforge_join_command is defined and reforge_join_command.stdout is defined
+      changed_when: true
+      no_log: true
+

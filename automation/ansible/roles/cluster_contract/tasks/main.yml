@@ -1,0 +1,30 @@
+---
+- name: Validate operator intent
+  ansible.builtin.include_role:
+    name: contract
+- name: Require one explicit controller kubeconfig
+  ansible.builtin.assert:
+    that:
+      - reforge_kubeconfig | default('') | length > 0
+      - "':' not in reforge_kubeconfig"
+      - reforge_kubeconfig is match('^/')
+      - reforge_kube_context | default('') | length > 0
+    fail_msg: Set reforge_kubeconfig to a single absolute private kubeconfig path.
+- name: Verify kubeconfig exists
+  ansible.builtin.stat:
+    path: "{{ reforge_kubeconfig }}"
+  register: reforge_kubeconfig_stat
+- name: Reject missing kubeconfig
+  ansible.builtin.assert:
+    that: reforge_kubeconfig_stat.stat.isreg | default(false)
+- name: Inspect selected kubeconfig context without disclosing credentials
+  ansible.builtin.command:
+    argv: [kubectl, --kubeconfig, "{{ reforge_kubeconfig }}", config, current-context]
+  register: reforge_current_context
+  changed_when: false
+  check_mode: false
+- name: Require the deliberate cluster context
+  ansible.builtin.assert:
+    that: reforge_current_context.stdout | trim == reforge_kube_context
+    fail_msg: Selected kubeconfig context differs from reforge_kube_context. Review the target before proceeding.
+

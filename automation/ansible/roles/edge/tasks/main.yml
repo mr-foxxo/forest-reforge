@@ -1,0 +1,51 @@
+---
+- name: Validate cluster contract
+  ansible.builtin.include_role:
+    name: cluster_contract
+- name: Require image pin, tunnel token and externally tested Access policy
+  ansible.builtin.assert:
+    that:
+      - reforge_cloudflared_image is match('^.+@sha256:[a-f0-9]{64}$')
+      - reforge_cloudflared_token | length > 0
+      - reforge_access_policy_verified | default(false) | bool
+  no_log: true
+- name: Create connector namespace
+  kubernetes.core.k8s:
+    kubeconfig: "{{ reforge_kubeconfig }}"
+    definition:
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: cloudflare-system
+        labels: {pod-security.kubernetes.io/enforce: restricted}
+- name: Store connector credential
+  kubernetes.core.k8s:
+    kubeconfig: "{{ reforge_kubeconfig }}"
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata: {name: tunnel-token, namespace: cloudflare-system}
+      type: Opaque
+      data:
+        TUNNEL_TOKEN: "{{ reforge_cloudflared_token | b64encode }}"
+  register: reforge_tunnel_secret_result
+  no_log: true
+  diff: false
+- name: Install two fixed connectors and bounded egress
+  kubernetes.core.k8s:
+    kubeconfig: "{{ reforge_kubeconfig }}"
+    definition: "{{ lookup('template', 'cloudflared.yaml.j2') | from_yaml_all | list }}"
+    apply: true
+- name: Restart connector after credential rotation
+  ansible.builtin.command:
+    argv: [kubectl, --kubeconfig, "{{ reforge_kubeconfig }}", -n, cloudflare-system, rollout, restart, deployment/cloudflared]
+  changed_when: true
+  when:
+    - not ansible_check_mode
+    - reforge_tunnel_secret_result.changed
+- name: Validate connector readiness
+  ansible.builtin.command:
+    argv: [kubectl, --kubeconfig, "{{ reforge_kubeconfig }}", -n, cloudflare-system, rollout, status, deployment/cloudflared, --timeout=300s]
+  changed_when: false
+  when: not ansible_check_mode
+

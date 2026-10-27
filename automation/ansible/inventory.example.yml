@@ -1,0 +1,36 @@
+---
+all:
+  vars:
+    ansible_user: platform
+    # Example addresses only; replace in a private inventory under local/.
+    reforge_inventory_reviewed: false
+  children:
+    canopy:
+      children:
+        control_plane:
+          hosts:
+            core-cp01:
+              ansible_host: 192.0.2.21
+              reforge_node_ip: 192.0.2.21
+              reforge_node_interface: ens18
+            core-cp02:
+              ansible_host: 192.0.2.22
+              reforge_node_ip: 192.0.2.22
+              reforge_node_interface: ens18
+            core-cp03:
+              ansible_host: 192.0.2.23
+              reforge_node_ip: 192.0.2.23
+              reforge_node_interface: ens18
+        workers:
+          hosts:
+            core-wk01:
+              ansible_host: 192.0.2.31
+              reforge_node_ip: 192.0.2.31
+            core-wk02:
+              ansible_host: 192.0.2.32
+              reforge_node_ip: 192.0.2.32
+    names:
+      hosts: {}
+    burrows:
+      hosts: {}
+

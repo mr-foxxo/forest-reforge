@@ -1,0 +1,7 @@
+---
+- name: Canopy - workload namespace boundaries
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  roles: [baseline]
+

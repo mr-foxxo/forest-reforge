@@ -1,0 +1,25 @@
+k8sServiceHost: {{ reforge_api_vip | to_json }}
+k8sServicePort: 6443
+kubeProxyReplacement: true
+routingMode: tunnel
+tunnelProtocol: vxlan
+ipam:
+  mode: cluster-pool
+  operator:
+    clusterPoolIPv4PodCIDRList: [{{ reforge_pod_cidr | to_json }}]
+    clusterPoolIPv4MaskSize: 24
+gatewayAPI:
+  enabled: true
+l2announcements:
+  enabled: true
+k8sClientRateLimit:
+  qps: 40
+  burst: 80
+operator:
+  replicas: 2
+hubble:
+  relay:
+    enabled: true
+  ui:
+    enabled: false
+

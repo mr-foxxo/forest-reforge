@@ -1,0 +1,9 @@
+[Unit]
+Description=Renew ECR pull token before its 12 hour expiry
+[Timer]
+OnBootSec=5m
+OnUnitActiveSec=6h
+RandomizedDelaySec=10m
+Persistent=true
+[Install]
+WantedBy=timers.target

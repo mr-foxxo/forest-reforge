@@ -1,0 +1,146 @@
+apiVersion: v1
+kind: ConfigMap
+metadata: {name: backstage-config, namespace: backstage}
+data:
+  app-config.production.yaml: |
+    app:
+      title: Forest Reforge
+      baseUrl: https://{{ reforge_backstage_hostname }}
+    organization:
+      name: {{ reforge_github_org | to_json }}
+    backend:
+      baseUrl: https://{{ reforge_backstage_hostname }}
+      listen: {port: 7007, host: 0.0.0.0}
+      cors:
+        origin: https://{{ reforge_backstage_hostname }}
+        methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
+        credentials: true
+      database:
+        client: pg
+        connection:
+          host: {{ reforge_backstage_database_host | to_json }}
+          port: {{ reforge_backstage_database_port }}
+          user: {{ reforge_backstage_database_user | to_json }}
+          password: ${POSTGRES_PASSWORD}
+{% if reforge_backstage_database_ssl %}
+          ssl:
+            rejectUnauthorized: true
+            ca: ${POSTGRES_CA}
+{% else %}
+          ssl: false
+{% endif %}
+    integrations:
+      github:
+        - host: github.com
+          token: ${GITHUB_TOKEN}
+    auth:
+      environment: production
+      providers:
+        github:
+          production:
+            clientId: {{ reforge_backstage_oauth_client_id | to_json }}
+            clientSecret: ${GITHUB_CLIENT_SECRET}
+            signIn:
+              resolvers:
+                - resolver: userIdMatchingUserEntityAnnotation
+    catalog:
+      providers:
+        githubOrg:
+          reforge:
+            id: reforge
+            orgUrl: https://github.com/{{ reforge_github_org }}
+            schedule:
+              frequency: {minutes: 15}
+              timeout: {minutes: 3}
+    permission:
+      enabled: true
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: backstage, namespace: backstage}
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: backstage}
+  template:
+    metadata:
+      labels: {app: backstage}
+    spec:
+      automountServiceAccountToken: false
+{% if reforge_backstage_image_pull_secret | default('') %}
+      imagePullSecrets: [{name: {{ reforge_backstage_image_pull_secret | to_json }}}]
+{% endif %}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile: {type: RuntimeDefault}
+      containers:
+        - name: backstage
+          image: {{ reforge_backstage_image | to_json }}
+          command: [node, packages/backend]
+          args: [--config, /etc/backstage/app-config.production.yaml]
+          envFrom: [{secretRef: {name: backstage-runtime}}]
+          ports: [{name: http, containerPort: 7007}]
+          resources:
+            requests: {cpu: 250m, memory: 512Mi}
+            limits: {cpu: "2", memory: 2Gi}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
+          startupProbe:
+            httpGet: {path: /.backstage/health/v1/readiness, port: http}
+            periodSeconds: 5
+            failureThreshold: 60
+          readinessProbe:
+            httpGet: {path: /.backstage/health/v1/readiness, port: http}
+          livenessProbe:
+            httpGet: {path: /.backstage/health/v1/liveness, port: http}
+          volumeMounts:
+            - {name: config, mountPath: /etc/backstage, readOnly: true}
+            - {name: tmp, mountPath: /tmp}
+      volumes:
+        - {name: config, configMap: {name: backstage-config}}
+        - {name: tmp, emptyDir: {}}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: backstage, namespace: backstage}
+spec:
+  selector: {app: backstage}
+  ports: [{name: http, port: 7007, targetPort: http}]
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata: {name: backstage, namespace: backstage}
+spec:
+  parentRefs:
+    - {name: {{ reforge_gateway_name }}, namespace: {{ reforge_gateway_namespace }}, sectionName: https}
+  hostnames: [{{ reforge_backstage_hostname | to_json }}]
+  rules:
+    - backendRefs: [{name: backstage, port: 7007}]
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata: {name: backstage-runtime, namespace: backstage}
+spec:
+  endpointSelector:
+    matchLabels: {app: backstage}
+  ingress:
+    - fromEntities: [ingress]
+      toPorts: [{ports: [{port: "7007", protocol: TCP}]}]
+  egress:
+    - toCIDR: [{{ reforge_backstage_database_cidr | to_json }}]
+      toPorts: [{ports: [{port: {{ reforge_backstage_database_port | string | to_json }}, protocol: TCP}]}]
+    - toFQDNs:
+        - {matchName: github.com}
+        - {matchName: api.github.com}
+      toPorts: [{ports: [{port: "443", protocol: TCP}]}]
+    - toEndpoints:
+        - matchLabels: {k8s:io.kubernetes.pod.namespace: kube-system, k8s:k8s-app: kube-dns}
+      toPorts:
+        - ports: [{port: "53", protocol: ANY}]
+          rules: {dns: [{matchPattern: "*"}]}
+

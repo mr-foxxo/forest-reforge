@@ -1,0 +1,18 @@
+---
+- name: Validate cluster contract
+  ansible.builtin.include_role:
+    name: cluster_contract
+- name: Protect infrastructure namespaces from workload policy
+  ansible.builtin.assert:
+    that:
+      - item not in ['kube-system', 'kube-public', 'kube-node-lease', 'default', 'argocd', 'openebs', 'cert-manager', 'monitoring', reforge_gateway_namespace]
+      - item is match('^[a-z][a-z0-9-]*$')
+      - reforge_pod_security_version is match('^v1\.[0-9]+$')
+  loop: "{{ reforge_workload_namespaces }}"
+- name: Create restricted namespaces and default-deny policies
+  kubernetes.core.k8s:
+    kubeconfig: "{{ reforge_kubeconfig }}"
+    definition: "{{ lookup('template', 'namespace.yaml.j2') | from_yaml_all | list }}"
+    apply: true
+  loop: "{{ reforge_workload_namespaces }}"
+

@@ -1,0 +1,6 @@
+---
+- name: Embers - selected driver build prerequisites and packaged drivers
+  hosts: burrows
+  become: true
+  roles: [embers]
+

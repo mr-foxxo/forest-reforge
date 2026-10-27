@@ -1,0 +1,41 @@
+apiVersion: kubeadm.k8s.io/v1beta4
+kind: InitConfiguration
+localAPIEndpoint:
+  advertiseAddress: {{ reforge_node_ip | to_json }}
+  bindPort: 6443
+nodeRegistration:
+  name: {{ inventory_hostname | to_json }}
+  criSocket: unix:///run/containerd/containerd.sock
+---
+apiVersion: kubeadm.k8s.io/v1beta4
+kind: ClusterConfiguration
+clusterName: {{ reforge_cluster | to_json }}
+kubernetesVersion: {{ reforge_kubernetes_version | to_json }}
+controlPlaneEndpoint: {{ (reforge_api_dns ~ ':6443') | to_json }}
+networking:
+  podSubnet: {{ reforge_pod_cidr | to_json }}
+  serviceSubnet: {{ reforge_service_cidr | to_json }}
+  dnsDomain: cluster.local
+proxy:
+  disabled: true
+apiServer:
+  certSANs:
+    - {{ reforge_api_dns | to_json }}
+    - {{ reforge_api_vip | to_json }}
+{% for host in groups['control_plane'] %}
+    - {{ hostvars[host].reforge_node_ip | to_json }}
+{% endfor %}
+  extraArgs:
+    - name: encryption-provider-config
+      value: /etc/kubernetes/reforge/encryption.yaml
+  extraVolumes:
+    - name: encryption-config
+      hostPath: /etc/kubernetes/reforge/encryption.yaml
+      mountPath: /etc/kubernetes/reforge/encryption.yaml
+      readOnly: true
+      pathType: File
+---
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+cgroupDriver: systemd
+

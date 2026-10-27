@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: cloudflared, namespace: cloudflare-system}
+spec:
+  replicas: 2
+  selector:
+    matchLabels: {app: cloudflared}
+  template:
+    metadata:
+      labels: {app: cloudflared}
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        seccompProfile: {type: RuntimeDefault}
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels: {app: cloudflared}
+              topologyKey: kubernetes.io/hostname
+      containers:
+        - name: cloudflared
+          image: {{ reforge_cloudflared_image | to_json }}
+          args: [tunnel, --no-autoupdate, --metrics, '0.0.0.0:2000', run]
+          envFrom: [{secretRef: {name: tunnel-token}}]
+          ports: [{name: metrics, containerPort: 2000}]
+          readinessProbe:
+            httpGet: {path: /ready, port: metrics}
+          livenessProbe:
+            httpGet: {path: /metrics, port: metrics}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
+          resources:
+            requests: {cpu: 100m, memory: 128Mi}
+            limits: {cpu: "1", memory: 256Mi}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: {name: cloudflared-egress, namespace: cloudflare-system}
+spec:
+  podSelector:
+    matchLabels: {app: cloudflared}
+  policyTypes: [Ingress, Egress]
+  ingress: []
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels: {kubernetes.io/metadata.name: kube-system}
+          podSelector:
+            matchLabels: {k8s-app: kube-dns}
+      ports: [{port: 53, protocol: UDP}, {port: 53, protocol: TCP}]
+    - to: [{ipBlock: {cidr: 0.0.0.0/0}}]
+      ports: [{port: 7844, protocol: TCP}, {port: 7844, protocol: UDP}]
+    - to: [{ipBlock: {cidr: {{ (reforge_gateway_ip ~ '/32') | to_json }}}}]
+      ports: [{port: 443, protocol: TCP}]

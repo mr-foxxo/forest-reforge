@@ -1,0 +1,103 @@
+---
+# Copy to local/site.yml. Exact versions are deliberate operator inputs.
+reforge_site: den
+reforge_cluster: core
+reforge_domain: example.net
+reforge_internal_domain: den.int.example.net
+reforge_api_dns: api.k8s.den.int.example.net
+reforge_api_vip: 192.0.2.30
+reforge_gateway_ip: 192.0.2.200
+reforge_pod_cidr: 10.244.0.0/16
+reforge_service_cidr: 10.96.0.0/12
+reforge_lb_start: 192.0.2.200
+reforge_lb_stop: 192.0.2.219
+reforge_l2_interfaces: ["^ens18$"]
+
+# Fill these from a single reviewed compatibility record; no implicit latest.
+reforge_kubernetes_minor: ""
+reforge_kubernetes_version: ""
+reforge_kubernetes_package_version: ""
+reforge_containerd_package_version: ""
+reforge_pause_image: ""
+reforge_kube_vip_image: ""
+reforge_gateway_api_url: ""
+reforge_gateway_api_sha256: ""
+reforge_cilium_version: ""
+reforge_cert_manager_version: ""
+reforge_openebs_version: ""
+reforge_argocd_version: ""
+reforge_monitoring_version: ""
+
+# Controller tools: helm 3, kubectl, Python kubernetes client; private kubeconfig.
+reforge_kubeconfig: "{{ lookup('env', 'KUBECONFIG') }}"
+reforge_kube_context: "kubernetes-admin@{{ reforge_cluster }}"
+reforge_pod_security_version: "{{ reforge_kubernetes_minor }}"
+reforge_workload_namespaces: [apps, backstage, cloudflare-system]
+
+# TLS: use a zone you control. Staging must pass before production is enabled.
+reforge_acme_email: ""
+reforge_acme_production: false
+reforge_acme_staging_verified: false
+reforge_dns01_zone: "{{ reforge_domain }}"
+reforge_tls_names:
+  - "*.{{ reforge_internal_domain }}"
+reforge_gateway_namespace: platform-system
+reforge_gateway_name: core-private
+
+# LocalPV hostpath only; no disk formatting and no default StorageClass takeover.
+reforge_localpv_path: /var/local/reforge/localpv
+reforge_storage_class: reforge-local
+reforge_lvm_enabled: false
+reforge_lvm_chart_version: ""
+reforge_lvm_volume_group: ""
+reforge_lvm_nodes: []
+reforge_monitoring_storage_class: "{{ reforge_storage_class }}"
+reforge_monitoring_size: 20Gi
+
+reforge_github_org: example-org
+reforge_argocd_sso: false
+reforge_argocd_oauth_client_id: ""
+reforge_argocd_admin_teams: [platform-admins]
+reforge_argocd_readonly_teams: [developers]
+reforge_gitops_repo: ""
+reforge_gitops_revision: ""
+reforge_gitops_path: clusters/den/core
+reforge_gitops_destinations:
+  - namespace: apps
+    server: https://kubernetes.default.svc
+
+# Backstage image must contain the GitHub auth/org, permission and DB plugins.
+reforge_backstage_image: ""
+reforge_backstage_image_pull_secret: ""
+reforge_backstage_hostname: "backstage.{{ reforge_internal_domain }}"
+reforge_backstage_oauth_client_id: ""
+reforge_backstage_database_host: ""
+reforge_backstage_database_cidr: ""
+reforge_backstage_database_port: 5432
+reforge_backstage_database_user: backstage
+reforge_backstage_database_ssl: true
+reforge_backstage_database_ca_file: ""
+reforge_cloudflared_image: ""
+reforge_access_policy_verified: false
+
+# Optional controller charts are disabled until their contracts are supplied.
+reforge_external_secrets_enabled: false
+reforge_external_secrets_version: ""
+reforge_logging_enabled: false
+reforge_loki_version: ""
+reforge_alloy_version: ""
+reforge_loki_values_file: ""
+reforge_alloy_values_file: ""
+
+# Backup runs on each control plane. Install matching etcdctl AND etcdutl first.
+reforge_backup_root: /var/backups/reforge
+reforge_backup_calendar: "*-*-* 02:15:00"
+reforge_backup_remote: ""
+
+# Burrows is a separate explicit phase. Never run it on Kubernetes guests.
+reforge_iommu_vendor: intel
+reforge_bootloader: "" # grub or proxmox-boot-tool, determined locally
+reforge_recovery_confirmed: false
+reforge_gpu_headers_package: ""
+reforge_gpu_driver_packages: []
+

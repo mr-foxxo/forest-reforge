@@ -1,0 +1,62 @@
+---
+- name: Validate cluster contract
+  ansible.builtin.include_role:
+    name: cluster_contract
+- name: Require networking release pins and reserved address range
+  ansible.builtin.assert:
+    that:
+      - reforge_cilium_version is match('^[0-9]+\.[0-9]+\.[0-9]+$')
+      - reforge_gateway_api_url is match('^https://github.com/kubernetes-sigs/gateway-api/releases/download/v[0-9.]+/standard-install.yaml$')
+      - reforge_gateway_api_sha256 is match('^[a-f0-9]{64}$')
+      - reforge_l2_interfaces | length > 0
+- name: Create temporary CRD download directory
+  ansible.builtin.tempfile:
+    state: directory
+    prefix: reforge-gateway-
+  register: reforge_gateway_temp
+  when: not ansible_check_mode
+- name: Install checksum verified Gateway API CRDs before Cilium
+  when: not ansible_check_mode
+  block:
+    - name: Download selected standard CRDs
+      ansible.builtin.get_url:
+        url: "{{ reforge_gateway_api_url }}"
+        checksum: "sha256:{{ reforge_gateway_api_sha256 }}"
+        dest: "{{ reforge_gateway_temp.path }}/standard-install.yaml"
+        mode: '0600'
+    - name: Apply reviewed CRDs
+      kubernetes.core.k8s:
+        kubeconfig: "{{ reforge_kubeconfig }}"
+        src: "{{ reforge_gateway_temp.path }}/standard-install.yaml"
+        apply: true
+        server_side_apply:
+          field_manager: reforge-bootstrap
+          force_conflicts: false
+  always:
+    - name: Remove CRD download directory
+      ansible.builtin.file:
+        path: "{{ reforge_gateway_temp.path }}"
+        state: absent
+- name: Install Cilium with kube-proxy replacement and L2 announcements
+  kubernetes.core.helm:
+    kubeconfig: "{{ reforge_kubeconfig }}"
+    release_name: cilium
+    release_namespace: kube-system
+    chart_ref: cilium
+    chart_repo_url: https://helm.cilium.io
+    chart_version: "{{ reforge_cilium_version }}"
+    release_values: "{{ lookup('template', 'values.yaml.j2') | from_yaml }}"
+    wait: true
+    atomic: true
+    timeout: 15m
+- name: Install dedicated LoadBalancer pool and L2 policy
+  kubernetes.core.k8s:
+    kubeconfig: "{{ reforge_kubeconfig }}"
+    definition: "{{ lookup('template', 'l2.yaml.j2') | from_yaml_all | list }}"
+    apply: true
+- name: Verify nodes become Ready after installing CNI
+  ansible.builtin.command:
+    argv: [kubectl, --kubeconfig, "{{ reforge_kubeconfig }}", wait, nodes, --all, --for=condition=Ready, --timeout=300s]
+  changed_when: false
+  when: not ansible_check_mode
+

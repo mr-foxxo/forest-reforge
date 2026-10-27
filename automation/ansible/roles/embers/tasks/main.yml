@@ -1,0 +1,21 @@
+---
+- name: Validate operator intent
+  ansible.builtin.include_role:
+    name: contract
+- name: Require driver experiment record and exact package choices
+  ansible.builtin.assert:
+    that:
+      - reforge_recovery_confirmed | bool
+      - reforge_gpu_headers_package is match('^[a-z0-9.+-]+=[a-zA-Z0-9:.+~_-]+$')
+- name: Validate driver package pins
+  ansible.builtin.assert:
+    that: item is match('^[a-z0-9.+-]+=[a-zA-Z0-9:.+~_-]+$')
+  loop: "{{ reforge_gpu_driver_packages }}"
+- name: Install headers and build dependencies without a full host upgrade
+  ansible.builtin.apt:
+    name: "{{ ['build-essential', 'dkms', 'pciutils', 'mokutil', reforge_gpu_headers_package] + reforge_gpu_driver_packages }}"
+    state: present
+- name: Report proprietary manager boundary
+  ansible.builtin.debug:
+    msg: Use an entitled manager or guest package matching your stack record. Run gpu-driver.sh to verify and extract it; inspect build failures before any patch or reboot.
+

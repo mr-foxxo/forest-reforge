@@ -1,0 +1,49 @@
+---
+- name: Validate operator intent
+  ansible.builtin.include_role:
+    name: contract
+- name: Require explicitly inspected hypervisor and recovery path
+  ansible.builtin.assert:
+    that:
+      - inventory_hostname not in groups.get('canopy', [])
+      - reforge_recovery_confirmed | bool
+      - reforge_iommu_vendor in ['intel', 'amd']
+      - reforge_bootloader in ['grub', 'proxmox-boot-tool']
+- name: Verify this is a Proxmox host
+  ansible.builtin.command: pveversion
+  changed_when: false
+  check_mode: false
+- name: Configure GRUB drop-in preserving existing arguments
+  when: reforge_bootloader == 'grub'
+  block:
+    - name: Create GRUB drop-in directory
+      ansible.builtin.file:
+        path: /etc/default/grub.d
+        state: directory
+        mode: '0755'
+    - name: Append selected IOMMU options
+      ansible.builtin.copy:
+        dest: /etc/default/grub.d/reforge-iommu.cfg
+        mode: '0644'
+        backup: true
+        content: |
+          GRUB_CMDLINE_LINUX_DEFAULT="$GRUB_CMDLINE_LINUX_DEFAULT {{ reforge_iommu_vendor }}_iommu=on iommu=pt"
+      notify: Update grub
+- name: Configure proxmox-boot-tool kernel command line
+  when: reforge_bootloader == 'proxmox-boot-tool'
+  block:
+    - name: Read existing EFI command line
+      ansible.builtin.slurp:
+        src: /etc/kernel/cmdline
+      register: reforge_cmdline
+    - name: Preserve unrelated kernel arguments and replace only IOMMU options
+      ansible.builtin.copy:
+        dest: /etc/kernel/cmdline
+        mode: '0644'
+        backup: true
+        content: "{{ (reforge_cmdline.content | b64decode | trim | regex_replace('(^|\\s)(intel_iommu|amd_iommu|iommu)=[^\\s]+', '') | trim) ~ ' ' ~ reforge_iommu_vendor ~ '_iommu=on iommu=pt\n' }}"
+      notify: Refresh proxmox boot
+- name: Report pending reboot requirement
+  ansible.builtin.debug:
+    msg: Reboot during a recovery-backed maintenance window, then run gpu-diagnose.sh. No VFIO binding or reboot was performed.
+

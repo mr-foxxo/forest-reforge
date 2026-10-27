@@ -1,0 +1,12 @@
+---
+# Deliberately excludes DNS host changes, hypervisor changes, applications and edge.
+- import_playbook: 01-roots.yml
+- import_playbook: 02-canopy.yml
+- import_playbook: 03-paths.yml
+- import_playbook: 05-vault.yml
+- import_playbook: 06-gatehouse.yml
+- import_playbook: 07-trails.yml
+- import_playbook: 08-lookout.yml
+- import_playbook: 09-baseline.yml
+- import_playbook: 12-backup.yml
+

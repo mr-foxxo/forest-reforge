@@ -1,0 +1,26 @@
+apiVersion: cilium.io/v2
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: core-private
+spec:
+  blocks:
+    - start: {{ reforge_lb_start | to_json }}
+      stop: {{ reforge_lb_stop | to_json }}
+  serviceSelector:
+    matchLabels:
+      gateway.networking.k8s.io/gateway-name: {{ reforge_gateway_name | to_json }}
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumL2AnnouncementPolicy
+metadata:
+  name: core-private
+spec:
+  interfaces: {{ reforge_l2_interfaces | to_json }}
+  nodeSelector:
+    matchLabels:
+      kubernetes.io/os: linux
+  serviceSelector:
+    matchLabels:
+      gateway.networking.k8s.io/gateway-name: {{ reforge_gateway_name | to_json }}
+  externalIPs: false
+  loadBalancerIPs: true
