@@ -10,7 +10,7 @@ Born in **Mr. Foxxo’s den**, part of Enchanted Forest Inc., it follows the who
 
 The point is not to pretend an old GPU is a new one. It is to understand its limits well enough to give it useful work.
 
-> **Automation iteration · 2026-10-27.** Modular guides now include generic Ansible configurations, installation and integration helpers, GPU/kernel diagnostics and an isolated legacy-console bundle. Start with the [automation guide](docs/automation.md) and a private site contract. The implementation was checked offline; no infrastructure deployment is claimed.
+> **Evidence update · 2026-10-28.** Generic automation is complemented by a reviewed operational snapshot: four hypervisors, a TrueNAS system, and 13 Ready Kubernetes nodes. See the [observed platform and limits](docs/den-case-study.md). Repository checks remain offline; these screenshots do not certify reproduction, failover or workload acceptance.
 
 ## What you can build
 
@@ -43,6 +43,8 @@ flowchart TD
 5. Run the [acceptance and recovery exercises](docs/acceptance.md).
 
 The [automation guide](docs/automation.md) provides phased setup commands, private inventory/vault examples, service prerequisites, AWS access/ECR renewal, recovery and rollback guidance. The [reference-to-automation map](docs/automation-source-map.md) explains what was carried forward from the source playbooks and chats. Target versions and credentials are deliberate local inputs.
+
+The [observed platform record](examples/observed-platform.json) captures five control planes and eight workers displaying kubelet v1.36.4, with worker-only totals of 64 CPU and 124.1 GiB allocatable RAM. Two hypervisors host Kubernetes guests; two additional hypervisors participate in the infrastructure without hosting Kubernetes nodes. The [observed-size inventory example](automation/ansible/inventory.observed.example.yml) keeps those roles separate. Run [cluster-resources.py](scripts/cluster-resources.py) read-only to compare fresh Node evidence before using an existing cluster.
 
 ## The modules
 
@@ -78,7 +80,7 @@ Read the [compatibility matrix](docs/compatibility.md) before buying or installi
 
 ## What is honest about this repository
 
-**Source-reported** means the supplied notes say it happened. **Proposed** means a reproducible design offered here. **Experimental** means unsupported or unvalidated combinations. **Unknown** means evidence is missing. None is silently promoted to a tested deployment.
+**Source-reported** means the supplied notes say it happened. **Screenshot-observed** means a supplied image visibly shows a specific field or status. **Proposed** means a reproducible design offered here. **Experimental** means unsupported or unvalidated combinations. **Unknown** means evidence is missing. None is silently promoted to a tested deployment.
 
 The [decision register](docs/decisions.md) resolves conflicting generations of the design. The local reference tree preserves all 26 project source files and both chat exports, including the original policy fragment. They are evidence, not an installation sequence. The release helper excludes historical references and the raw on-prem source, keeping private inventories and deployment artifacts out of the generic archive.
 

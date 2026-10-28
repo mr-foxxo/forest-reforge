@@ -90,6 +90,7 @@ class Helpers(unittest.TestCase):
             script = folder / "scripts/package-release.sh"
             script.write_text((ROOT / "scripts/package-release.sh").read_text())
             for name in ("reference/integration_onprem/vault.yml", "local/secrets.yml",
+                         "reference/den-evidences/nodes.png", "local/den-evidence/record.json",
                          "automation/drac5/private/runtime/vkvm.jnlp", "automation/drac5/.env"):
                 path = folder / name
                 path.parent.mkdir(parents=True, exist_ok=True)

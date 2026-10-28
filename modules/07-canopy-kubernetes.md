@@ -56,7 +56,9 @@ Cilium documents L2 announcement limitations with `externalTrafficPolicy: Local`
 
 ## Expansion
 
-The historical inventory extends to five control planes and seven workers, with storage discovery counts also changing. Derive expected counts from inventory rather than copied constants. Add nodes in stages: prepare OS/network, join, validate Ready/Cilium/storage, label/taint purpose, test a workload, then allow normal scheduling.
+The screenshots reviewed on 2026-10-28 show **five control planes and eight workers, all Ready at kubelet v1.36.4**. The worker-only dashboard shows 64 CPU and 124.1 GiB allocatable RAM. See the [observed snapshot](../docs/den-case-study.md) for scope and limits; per-node resource sizes and hypervisor placement are not shown. The [observed-size inventory](../automation/ansible/inventory.observed.example.yml) represents this scale with generic identifiers. It is separate from the smaller new-build default.
+
+Derive expected counts from the intended inventory and refresh evidence with [cluster-resources.py](../scripts/cluster-resources.py), rather than treating the screenshot as a universal baseline. Add nodes in stages: prepare OS/network, join, validate Ready/Cilium/storage, label/taint purpose, test a workload, then allow normal scheduling. The two infrastructure-only hypervisors are not extra cluster nodes or capacity.
 
 Do not rename joined nodes in place. Drain with workload/PDB awareness, remove/recreate membership using the chosen procedure, and preserve data ownership. Never drain all control planes or all LocalPV owners together.
 

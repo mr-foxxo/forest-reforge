@@ -15,6 +15,8 @@ The operational sources describe OpenEBS LocalPV Hostpath and LocalPV LVM with n
 
 The old NDM/device cleanup and full-uninstall commands are historical and destructive. Disk wipe requires a separately identified target and an explicit local recovery plan; no wipe script is shipped here.
 
+The [NAS evidence](../docs/den-case-study.md) now confirms a running TrueNAS dashboard and two ONLINE single-disk pools. No Kubernetes export, replicated volume, backup job or restore is demonstrated. Pool health alone does not validate the LocalPV migration or an independent recovery destination.
+
 ## PostgreSQL and object storage
 
 The older design prefers PostgreSQL, directory services and MinIO on dedicated VMs with Kubernetes for stateless services. The newer Backstage runbook uses a dedicated PostgreSQL StatefulSet on LocalPV LVM. These are alternatives with different failure and backup properties, not two copies to deploy accidentally.

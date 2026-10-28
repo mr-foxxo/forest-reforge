@@ -2,6 +2,8 @@
 
 Automation: `lookout` installs monitoring and optional logging/secrets controllers; `backup` schedules [etcd-backup.sh](../scripts/etcd-backup.sh). [cluster-troubleshoot.sh](../scripts/cluster-troubleshoot.sh) collects layer-specific conditions without Secret contents. See the [recovery guide](../docs/automation.md).
 
+The [observed worker dashboard](../docs/den-case-study.md) establishes scoped CPU/memory/pod readings, not the metrics backend, query provenance or retention. [cluster-resources.py](../scripts/cluster-resources.py) refreshes Node counts/readiness/capacity without reading workloads or Secrets; usage/requests/limits still need a separate scoped metrics capture. NAS ONLINE status and green scrub indicators do not replace an independent restore test.
+
 ## Observe the whole chain
 
 The source baseline installs kube-prometheus-stack with Grafana, Prometheus, Alertmanager, node exporter and kube-state-metrics. Hubble covers cluster network visibility. Loki + Alloy are a planned GitOps stack with versions, retention and storage still to be chosen.

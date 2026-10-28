@@ -1,6 +1,6 @@
 # Acceptance, rollback and release evidence
 
-All tests below are operator tasks. This documentation package has not run them on the den.
+All tests below remain operator tasks unless a specific result is recorded. The [reviewed snapshot](den-case-study.md) establishes hardware/version fields, ONLINE NAS pools and 13 Ready Kubernetes nodes, with worker-only resource totals. It does not establish failover, restore, network/identity rejection, GPU workloads or successful reproduction by the new playbooks. No live acceptance tests were run by this repository update.
 
 | Gate | Positive test | Negative/failure test | Evidence |
 |---|---|---|---|
@@ -30,4 +30,4 @@ For every mutating change record: pre-change versions/config, known-good boot pa
 
 ## Package validation versus deployment validation
 
-Repository validation covers local links, Markdown/code-fence structure, sanitized source coverage, script syntax and ZIP integrity. It does not certify OpenWrt, Proxmox, Kubernetes, AWS, GPU licensing or AI runtime behavior. Promote a stack to locally validated only with the [stack record](../examples/validated-stack.md).
+Repository validation covers links, syntax, templates, offline behavior and archive exclusions. `cluster-resources.py --context YOUR_CONTEXT --expect examples/observed-platform.json` additionally checks current Node inventory/readiness and aggregate worker capacity against the reviewed snapshot. It does not check Pod requests/metrics, placement, services or recovery. A difference from the snapshot can be a deliberate capacity/version change. Promote a complete stack to locally validated only with the [stack record](../examples/validated-stack.md) and the relevant functional results.

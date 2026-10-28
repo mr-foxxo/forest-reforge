@@ -2,6 +2,8 @@
 
 Helpers: [host audit](../scripts/host-audit.sh), [selected-GPU diagnosis](../scripts/gpu-diagnose.sh) and the [isolated DRAC5 viewer](../automation/drac5/compose.yml). See the [automation guide](../docs/automation.md) for private inputs and limitations.
 
+The [reviewed hardware snapshot](../docs/den-case-study.md) now supplies CPU models, displayed usable RAM, kernels and boot modes for four hypervisors plus NAS state. It separates two Kubernetes guest hosts from two infrastructure-only hosts. These observations improve sizing; they do not establish final DIMM population, sustained memory stability, chassis power qualification or GPU workload results.
+
 ## R710 case
 
 The available history reports an R710 revision II, dual Xeon X5690, dual 870 W PSUs, iDRAC6 Enterprise, Riser 2 x16 and one installed Tesla P4. A second P4 was available. This is a source-reported configuration, not a vendor validation of every R710/GPU combination.

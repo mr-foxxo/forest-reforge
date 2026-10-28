@@ -19,13 +19,14 @@ Forest Reforge separates the physical facility, management plane, workload plane
 ## Evidence levels
 
 - **Source-reported:** supplied operational documentation or visible chat says this was implemented or observed; not verified against live equipment here.
+- **Screenshot-observed:** a supplied dashboard/node view visibly establishes a field or state at capture. Its review date is not necessarily its capture date, and it does not prove a recovery or workload test passed.
 - **Proposed:** a generic design or procedure synthesized for readers.
 - **Experimental:** requires qualification, may lack vendor support.
 - **Unknown:** records do not settle it.
 
 The source files contain both successful-execution statements and outstanding acceptance lists. A playbook described as implemented is not proof that every failover, restore, security boundary or workload has passed.
 
-The repository includes sanitized full exports of the two added vGPU and DRAC5 chats. Other available history is summaries/selected messages; additional personal-context retrieval was unavailable. Every supplied file is retained in sanitized form for traceability.
+The local reference tree includes the earlier source notes/chats and seven operational screenshots reviewed on 2026-10-28. Raw images contain private hostnames and remain ignored/excluded from releases. The [generic observation record](../examples/observed-platform.json) and [case study](den-case-study.md) publish selected technical facts without those identifiers. Private aliases and source hashes are retained under ignored `local/den-evidence/` for traceability.
 
 ## Canonical example topology
 
@@ -38,6 +39,8 @@ The older VM-subnet layout is valid only with its own routed/L2 design. If worke
 Three control-plane VMs on one physical host protect against some VM failures, not host failure. Three voters on two hosts cannot survive either host loss symmetrically. Keep the initial deployment honest about this. Add an independent third physical failure domain before claiming host-resilient quorum.
 
 Two cloudflared replicas on one host have the same limitation. Two PSUs on one PDU do not make two power paths. LocalPV is not distributed storage. A second DNS process on the same failing disk is not independent DNS recovery.
+
+The reviewed Den snapshot has five control planes and eight workers hosted within a two-hypervisor Kubernetes scope. Two other integrated hypervisors do not host cluster nodes and must not be counted as Kubernetes capacity or quorum failure domains. Current per-VM placement is not visible; do not infer it from earlier inventory notes. The NAS's two ONLINE single-disk pool views do not establish redundant storage or Kubernetes storage integration.
 
 ## Delivery ownership
 

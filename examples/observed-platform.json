@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "evidence_level": "screenshot-observed",
+  "reviewed_on": "2026-10-28",
+  "captured_at": null,
+  "capture_time_note": "The supplied screenshots do not establish an absolute capture date.",
+  "hypervisors": [
+    {
+      "id": "hv01",
+      "kubernetes_guest_host": true,
+      "cpu_model": "Intel Xeon X5690 @ 3.47GHz",
+      "sockets": 2,
+      "logical_cpus": 24,
+      "memory_total_gib": 125.87,
+      "memory_used_gib": 75.49,
+      "root_disk_total_gib": 93.93,
+      "root_disk_used_gib": 32.96,
+      "kernel": "7.0.14-5-pve",
+      "pve_manager_version": "9.2.4",
+      "boot_mode": "Legacy BIOS"
+    },
+    {
+      "id": "hv02",
+      "kubernetes_guest_host": true,
+      "cpu_model": "Intel Xeon E5-2698 v3 @ 2.30GHz",
+      "sockets": 2,
+      "logical_cpus": 64,
+      "memory_total_gib": 62.65,
+      "memory_used_gib": 50.34,
+      "ksm_shared_gib": 8.95,
+      "root_disk_total_gib": 93.93,
+      "root_disk_used_gib": 14.50,
+      "kernel": "7.0.14-16-pve",
+      "pve_manager_version": "9.2.18",
+      "boot_mode": "EFI"
+    },
+    {
+      "id": "hv03",
+      "kubernetes_guest_host": false,
+      "cpu_model": "Intel Xeon X3430 @ 2.40GHz",
+      "sockets": 1,
+      "logical_cpus": 4,
+      "memory_total_gib": 15.61,
+      "memory_used_gib": 9.94,
+      "root_disk_total_gib": 93.93,
+      "root_disk_used_gib": 8.63,
+      "kernel": "7.0.2-6-pve",
+      "pve_manager_version": "9.2.2",
+      "boot_mode": "Legacy BIOS"
+    },
+    {
+      "id": "hv04",
+      "kubernetes_guest_host": false,
+      "cpu_model": "Intel Xeon X5660 @ 2.80GHz",
+      "sockets": 1,
+      "logical_cpus": 12,
+      "memory_total_gib": 23.46,
+      "memory_used_gib": 10.48,
+      "root_disk_total_gib": 93.94,
+      "root_disk_used_gib": 14.56,
+      "kernel": "7.0.2-6-pve",
+      "pve_manager_version": "9.2.2",
+      "boot_mode": "Legacy BIOS"
+    }
+  ],
+  "nas": {
+    "id": "nas01",
+    "kubernetes_guest_host": false,
+    "product": "TrueNAS Community",
+    "version": "25.10.7 - Goldeye",
+    "cpu_model": "Intel Xeon E5410 @ 2.33GHz",
+    "visible_cpu_chart_series": 8,
+    "sockets": null,
+    "memory_total_gib": 23.5,
+    "memory_ecc_displayed": true,
+    "pools": [
+      {"id": "pool01", "status": "ONLINE", "data_vdevs": 1, "disks": 1, "disks_with_errors": 0, "used_percent": 17.72, "free_space": "465.61 GiB"},
+      {"id": "pool02", "status": "ONLINE", "data_vdevs": 1, "disks": 1, "disks_with_errors": 0, "used_percent": 0.00, "free_space": "1.76 TiB"}
+    ],
+    "redundancy_validated": false,
+    "backup_restore_validated": false
+  },
+  "kubernetes": {
+    "kubelet_version": "v1.36.4",
+    "control_plane_count": 5,
+    "worker_count": 8,
+    "node_count": 13,
+    "ready_node_count": 13,
+    "control_plane_taints_per_node_displayed": 1,
+    "worker_taints_per_node_displayed": 0,
+    "per_node_resources": null,
+    "guest_placement": null,
+    "worker_resources": {
+      "scope": "workers-only",
+      "cpu_cores": {"usage": 1.45, "requests": 7.88, "limits": 49.85, "allocatable": 64.00, "capacity": 64.00},
+      "memory_gib": {"usage": 17.2, "requests": 29.0, "limits": 99.0, "allocatable": 124.1, "capacity": 124.9},
+      "pods": {"usage": 116, "allocatable": 880, "capacity": 880},
+      "memory_display_tolerance_gib": 0.1
+    }
+  },
+  "not_validated_by_screenshots": [
+    "new_bootstrap_playbooks_match_the_running_installation",
+    "exact_vm_to_hypervisor_placement_and_per_node_allocations",
+    "api_server_etcd_runtime_cni_and_chart_versions",
+    "gpu_driver_profiles_guest_cuda_and_model_workloads",
+    "physical_host_failover_and_etcd_quorum_recovery",
+    "network_identity_tls_and_cloud_authorization_acceptance",
+    "application_data_and_off_host_backup_restore"
+  ]
+}

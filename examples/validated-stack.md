@@ -1,6 +1,6 @@
 # Validated stack record
 
-**No complete deployment tuple has been independently validated for this documentation edition.** Fill one record per GPU/host/workload combination. Do not use a “works” badge with missing fields.
+**Partial operational evidence is available; no complete GPU/host/workload tuple is certified.** The [reviewed platform snapshot](observed-platform.json) establishes displayed host versions/resources and 13 Ready nodes at kubelet v1.36.4. It does not supply driver checksums, guest/runtime versions, placement, workloads or recovery results. Fill one record per GPU/host/workload combination. Do not use a “works” badge with missing fields.
 
 ```yaml
 record_id: REQUIRED

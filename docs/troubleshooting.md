@@ -1,5 +1,7 @@
 # Troubleshooting by layer
 
+For a read-only capacity/inventory comparison, run `python scripts/cluster-resources.py --context YOUR_CONTEXT --expect examples/observed-platform.json` from the controller environment. A snapshot mismatch may reflect an intentional upgrade or resize; inspect it before changing the cluster. See the [evidence scope](den-case-study.md) to distinguish worker totals, host memory and unverified guest placement.
+
 | Symptom | First evidence | Likely branch | Avoid |
 |---|---|---|---|
 | Memory errors vary with population | Stick/slot/channel matrix | Training, slot/socket, settings or DIMM fault | Declaring all modules defective |

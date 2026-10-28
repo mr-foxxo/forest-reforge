@@ -1,0 +1,63 @@
+---
+# Screenshot-sized example, not a live inventory or a VM placement assertion.
+# All addresses are documentation-only. Never run bootstrap against an existing
+# cluster just to compare evidence: use scripts/cluster-resources.py instead.
+all:
+  vars:
+    ansible_user: platform
+    reforge_inventory_reviewed: false
+  children:
+    burrows:
+      children:
+        kubernetes_hypervisors:
+          hosts:
+            hv01:
+              ansible_host: 198.51.100.11
+            hv02:
+              ansible_host: 198.51.100.12
+        infrastructure_only_hypervisors:
+          hosts:
+            hv03:
+              ansible_host: 198.51.100.13
+            hv04:
+              ansible_host: 198.51.100.14
+    nas:
+      hosts:
+        nas01:
+          ansible_host: 198.51.100.21
+    canopy:
+      children:
+        control_plane:
+          hosts:
+            core-cp01:
+              ansible_host: 192.0.2.21
+              reforge_node_ip: 192.0.2.21
+              reforge_node_interface: ens18
+            core-cp02:
+              ansible_host: 192.0.2.22
+              reforge_node_ip: 192.0.2.22
+              reforge_node_interface: ens18
+            core-cp03:
+              ansible_host: 192.0.2.23
+              reforge_node_ip: 192.0.2.23
+              reforge_node_interface: ens18
+            core-cp04:
+              ansible_host: 192.0.2.24
+              reforge_node_ip: 192.0.2.24
+              reforge_node_interface: ens18
+            core-cp05:
+              ansible_host: 192.0.2.25
+              reforge_node_ip: 192.0.2.25
+              reforge_node_interface: ens18
+        workers:
+          hosts:
+            core-wk01: {ansible_host: 192.0.2.31, reforge_node_ip: 192.0.2.31}
+            core-wk02: {ansible_host: 192.0.2.32, reforge_node_ip: 192.0.2.32}
+            core-wk03: {ansible_host: 192.0.2.33, reforge_node_ip: 192.0.2.33}
+            core-wk04: {ansible_host: 192.0.2.34, reforge_node_ip: 192.0.2.34}
+            core-wk05: {ansible_host: 192.0.2.35, reforge_node_ip: 192.0.2.35}
+            core-wk06: {ansible_host: 192.0.2.36, reforge_node_ip: 192.0.2.36}
+            core-wk07: {ansible_host: 192.0.2.37, reforge_node_ip: 192.0.2.37}
+            core-wk08: {ansible_host: 192.0.2.38, reforge_node_ip: 192.0.2.38}
+    names:
+      hosts: {}

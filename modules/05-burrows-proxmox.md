@@ -18,7 +18,7 @@ The reference host uses separate physical segments rather than VLAN trunking. A 
 
 Use a pinned OS image/checksum; cloud-init where supported; VirtIO network and disk; qemu guest agent; fixed resource limits; stable MAC/IP reservations; known DNS/NTP; and SSH keys rather than shared passwords. Clone before installing kubeadm so machine identity and node names are unique.
 
-The source inventory gives initial control planes 2 vCPU/8 GB and some workers 4 vCPU/24 GB. Treat these as starting allocations, then measure. Reserve RAM for the host, filesystem caches and all always-on guests; never size solely from installed DIMM labels after memory failures.
+The old inventory gives initial control planes 2 vCPU/8 GB and some workers 4 vCPU/24 GB. Those are historical allocations, not current per-node measurements. The [reviewed host panels](../docs/den-case-study.md) show usable RAM of 125.87 GiB and 62.65 GiB on the Kubernetes guest hosts; the worker dashboard aggregates 124.1 GiB allocatable. Guest placement and current control-plane allocations still need private VM exports. Reserve RAM for hosts, caches and all guests; do not add KSM savings or infrastructure-only host RAM to cluster allocatable capacity.
 
 CPU `host` can expose useful instructions but restrict migration across different CPU generations. With passthrough GPUs, treat guests as tied to the physical device unless migration support has explicitly been proven. Record NUMA topology for dual-socket hosts and check memory/PCI locality under load.
 
@@ -34,7 +34,7 @@ Back up host configuration and VM configuration; preserve licensed installer che
 
 ## Storage boundaries
 
-Do not layer ZFS on a hardware RAID virtual disk without a deliberate supported design; know which layer owns redundancy and error reporting. Do not infer ZFS/PBS/Ceph was deployed from this guide. The supplied sources do not establish that.
+Do not layer ZFS on a hardware RAID virtual disk without a deliberate supported design; know which layer owns redundancy and error reporting. The NAS screenshot shows TrueNAS and two ONLINE single-disk pools. It does not establish a Proxmox ZFS datastore, PBS, Ceph, Kubernetes exports or tested recovery. Keep those deployment claims separate.
 
 A VM snapshot on the same failed datastore is not an off-host backup. Test application-consistent backups for stateful services and keep the encryption material needed to restore them.
 

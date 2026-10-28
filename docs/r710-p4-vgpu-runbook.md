@@ -6,6 +6,8 @@ The newly supplied July 22 chat records the owner's R710 revision II, dual 870 W
 
 The final proposed host procedure used **NVIDIA vGPU 16.14 / Linux KVM Manager 535.309.01**. NVIDIA's release table independently confirms that package mapping. The owner then reported the driver installed and later clarified `vgpud` finished successfully. No actual `uname -r`, complete post-install log, final patch diff or successful guest CUDA result appears in the export. Mark this **source-reported host milestone**, not a completely validated stack.
 
+The later host summary reviewed on 2026-10-28 now displays kernel **7.0.14-5-pve** and Proxmox manager **9.2.4** for the corresponding generic hv01. This establishes a later displayed host tuple, but that image contains no NVIDIA driver/module/profile or guest workload result. Do not attach the chat's 535.309.01 milestone to that kernel without fresh driver evidence. See the [current platform observation](den-case-study.md).
+
 The chat's initial V100 lane proposed 19.5 / 580.159.01 and a 7.0 kernel. That is a separate proposed tuple; no V100 installation result is shown. Do not combine Pascal and Volta recipes.
 
 ## Card identity and R710 constraints

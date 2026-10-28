@@ -1,10 +1,12 @@
 # Release notes — automation iteration
 
-Prepared 2026-10-27. Suggested repo: `forest-reforge`. Nothing has been published to GitHub.
+Updated 2026-10-28. Suggested repo: `forest-reforge`. Nothing has been published to GitHub.
 
 ## Included
 
 Thirteen modular guides; phased Ansible roles and private contract examples; Kubernetes/Cilium/Gateway/TLS/storage configuration; GitHub/Argo/Backstage/tunnel integrations; monitoring and optional logging/secrets controllers; EKS/ECR helpers and IAM examples; Proxmox/GPU/kernel/recovery helpers; isolated DRAC5 viewer; offline tests and an allowlisted release packager. The source map records coverage of all 26 notes, the supplied roles and both chats.
+
+The evidence update adds a generic hardware/NAS/resource snapshot, a 5-control-plane/8-worker example inventory and a read-only Node resource checker. Seven supplied screenshots show 13 Ready nodes at kubelet v1.36.4 and worker-scoped resource totals. Four hypervisors are recorded, with two explicitly outside Kubernetes hosting. Raw images, private aliases and source hashes remain excluded from publication; displayed operational state is distinguished from unperformed functional acceptance.
 
 ## Boundaries
 

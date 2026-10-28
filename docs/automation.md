@@ -2,6 +2,16 @@
 
 This iteration adds portable Ansible roles, service configurations and operational helpers derived from the supplied on-prem implementation and both chat exports. It is a **proposed implementation with offline validation**, not a deployed-stack record. Nothing loads configuration from `reference/`. The [source map](automation-source-map.md) records the design choices carried forward.
 
+## Existing platform: inspect before changing
+
+The [evidence reviewed on 2026-10-28](den-case-study.md) shows 5 control planes and 8 workers Ready at kubelet v1.36.4. Its [generic snapshot](../examples/observed-platform.json) records worker-only capacity and four hypervisor panels; two hypervisors host Kubernetes guests and two are infrastructure only. It does not supply a complete bootstrap/runtime/chart tuple or current VM placement.
+
+Use `python scripts/cluster-resources.py --context YOUR_CONTEXT --expect examples/observed-platform.json` from the prepared controller for a read-only comparison. It reads only Nodes and emits generic aggregates. It also accepts a private `--nodes-json` export. See the [case study](den-case-study.md) for output/exit-code scope. Do not run `roots`, `canopy` or `main.yml` against a working cluster just to validate these screenshots: those phases own OS/runtime/bootstrap configuration.
+
+The [observed-size inventory](../automation/ansible/inventory.observed.example.yml) is an alternative to the smaller new-build inventory. Copy one example deliberately; both use documentation-only addresses and remain unreviewed by default. `kubernetes_hypervisors` and `infrastructure_only_hypervisors` are separate children of `burrows`; only guest nodes belong to `canopy`. The infrastructure-only hosts remain eligible for explicitly selected hypervisor maintenance, not automatic Kubernetes joins. No current guest-to-host mapping is invented.
+
+Use the screenshot's v1.36.4 as an observed kubelet version, not proof of the API server, Debian package revision, containerd version, driver or chart pins. Leave those fields unresolved until exported/qualified privately. Generic role names are example identifiers; do not rename live nodes to adopt them. For adoption, reconcile existing ownership/configuration and collect the missing functional evidence before choosing which roles should manage the system.
+
 ## Controller and private contract
 
 Use a Linux/macOS controller with Bash, Python 3.11+, Helm 3, kubectl and SSH; release packaging also uses rsync and tar. Cloud helpers require AWS CLI v2 and jq. Nodes must be dedicated systemd Debian/Ubuntu guests with Kubernetes 1.31+ for kubeadm v1beta4. The runtime role supports distribution **containerd 1.x** only; qualify containerd 2.x separately. Hypervisor work targets a separate `burrows` inventory group.
