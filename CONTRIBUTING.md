@@ -1,13 +1,55 @@
-# Contributing
+# Contributing to Forest Reforge
 
-Make reuse measurable. A useful contribution states exact hardware and software, the problem, the smallest change, how it was tested, and how to undo it.
+Contributions make reused hardware easier to configure, operate and recover. Describe the concrete problem, the resulting behavior, the versions involved, how you checked the change and how to reverse it.
 
-For GPU reports include the complete validated-stack record, actual application kernels, thermal/power observations and reboot behavior. Identify official support separately from patched success. Do not redistribute proprietary driver binaries, license material, private firmware dumps or credentials.
+## Follow the project conventions
 
-For network changes include positive and negative paths, IPv4/IPv6 scope and recovery access. For storage include data ownership and restore evidence. For cloud changes include account/namespace scope without live account identifiers.
+Read the relevant [module](README.md#the-modules), [naming conventions](docs/naming.md), [decision register](docs/decisions.md) and [automation guide](docs/automation.md) before changing a configuration contract. Keep changes focused and update the associated example and guide together.
 
-Keep documentation in English for broad reuse; source history retains its original English/Portuguese text. Add translations only when they preserve technical meaning and evidence labels.
+Write documentation in English. Use role-based hostnames, example domains, documentation addresses and dummy account IDs in public files. Keep private inventory, credentials, raw evidence and runtime artifacts in the ignored `local/` or `reference/` trees. Keep secrets out of command output, diffs, screenshots and pull-request descriptions.
 
-Before release: check relative links, code fences, script syntax, example identifiers, secret exposure and ZIP contents. Do not turn an experimental result into a universal compatibility claim.
+Preserve the distinction between Kubernetes guest nodes, Kubernetes-hosting hypervisors and infrastructure-only hosts. Resource records must identify whether their scope is a physical host, control planes, workers or the whole cluster. Record evidence review dates separately from capture times, and retain the original measurement units.
 
-Licensing for public reuse must be selected by the repository owner; see RELEASE.md. No license grant is implied by this draft's availability.
+## Record useful evidence
+
+| Change | Include |
+|---|---|
+| Hardware or GPU | Exact hardware/software tuple, exposure mode, application kernels, thermal/power observations, restart behavior and rollback; use the [stack record](examples/validated-stack.md) |
+| Networking or identity | Positive and rejected paths, IPv4/IPv6 scope, authorization boundary and recovery access |
+| Storage or recovery | Data ownership, persistence expectations, backup location and restore results |
+| Kubernetes resources | Role counts, versions, capacity versus allocatable resources, metrics scope and private placement records where relevant |
+| Cloud integration | Account/namespace scope, runtime identity mechanism and permitted/denied operations, with live identifiers removed |
+| Automation | Required inputs, configuration ownership, idempotency, failure handling and post-change checks |
+
+Keep vendor support information distinct from results obtained with local patches. Record the command, expected outcome and observed result for functional tests. Preserve source attribution and checksums for external inputs.
+
+## Validate your change
+
+Prepare the controller environment using the [setup guide](docs/automation.md). With that environment active, run the relevant checks below.
+
+For Python helpers, templates, configuration contracts or packaging:
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+The AWS helper tests use mocked commands; jq enables those checks. For shell changes, also check the affected script with `bash -n path/to/script.sh`.
+
+For Ansible changes, run from `automation/ansible` with the pinned collections installed:
+
+```bash
+for playbook in playbooks/*.yml; do
+  ansible-playbook -i inventory.example.yml -e @site.example.yml "$playbook" --syntax-check || exit
+done
+ansible-playbook -i inventory.observed.example.yml -e @site.example.yml playbooks/main.yml --syntax-check
+```
+
+For documentation, check relative links, code fences, paths and consistency with the shipped examples. For operational changes, use the relevant [acceptance checks](docs/acceptance.md) and record the target environment and results. For release changes, build a fresh archive using [RELEASE.md](RELEASE.md), verify that `LICENSE` is included, and inspect exclusions and checksums.
+
+## Submit a reviewable change
+
+Explain the problem and final behavior in the pull request. Include the applicable checks and their results, exact versions, configuration ownership changes and rollback steps. Update [RELEASE.md](RELEASE.md) when the change affects release contents or user-facing behavior. Keep private logs and credentials outside the public submission.
+
+## License and external material
+
+Contributions follow the repository's [GNU General Public License v3.0](LICENSE). Preserve authorship and applicable third-party notices. Reference operator-supplied drivers, firmware, controller JARs and credential material through the documented private-input workflow; contribute only files you have permission to distribute.

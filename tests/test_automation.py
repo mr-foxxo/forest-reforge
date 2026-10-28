@@ -85,7 +85,7 @@ class Helpers(unittest.TestCase):
             folder = pathlib.Path(directory)
             for name in ("assets", "docs", "examples", "modules", "scripts", "automation", "tests"):
                 (folder / name).mkdir()
-            for name in ("README.md", "CONTRIBUTING.md", "RELEASE.md", ".gitignore"):
+            for name in ("README.md", "CONTRIBUTING.md", "RELEASE.md", "LICENSE", ".gitignore"):
                 (folder / name).write_text("public\n")
             script = folder / "scripts/package-release.sh"
             script.write_text((ROOT / "scripts/package-release.sh").read_text())
@@ -99,6 +99,7 @@ class Helpers(unittest.TestCase):
             result = subprocess.run(["bash", str(script), str(archive)], text=True, capture_output=True)
             self.assertEqual(result.returncode, 0, result.stderr)
             with tarfile.open(archive) as package:
+                self.assertEqual(package.extractfile("forest-reforge/LICENSE").read(), (folder / "LICENSE").read_bytes())
                 for member in package.getmembers():
                     if member.isfile():
                         self.assertNotIn(b"PRIVATE_SENTINEL", package.extractfile(member).read())

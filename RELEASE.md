@@ -1,27 +1,50 @@
-# Release notes — automation iteration
+# Release notes
 
-Updated 2026-10-28. Suggested repo: `forest-reforge`. Nothing has been published to GitHub.
+## 2026-10-28 · Platform evidence and automation
 
-## Included
+Forest Reforge combines thirteen infrastructure modules with phased configuration, operational helpers and a documented Den platform. Public examples follow the project's naming conventions and use generic addresses and private configuration inputs.
 
-Thirteen modular guides; phased Ansible roles and private contract examples; Kubernetes/Cilium/Gateway/TLS/storage configuration; GitHub/Argo/Backstage/tunnel integrations; monitoring and optional logging/secrets controllers; EKS/ECR helpers and IAM examples; Proxmox/GPU/kernel/recovery helpers; isolated DRAC5 viewer; offline tests and an allowlisted release packager. The source map records coverage of all 26 notes, the supplied roles and both chats.
+### Included
 
-The evidence update adds a generic hardware/NAS/resource snapshot, a 5-control-plane/8-worker example inventory and a read-only Node resource checker. Seven supplied screenshots show 13 Ready nodes at kubelet v1.36.4 and worker-scoped resource totals. Four hypervisors are recorded, with two explicitly outside Kubernetes hosting. Raw images, private aliases and source hashes remain excluded from publication; displayed operational state is distinguished from unperformed functional acceptance.
+- Ansible phases for node preparation, kubeadm, Cilium, Gateway API, DNS/TLS, storage, identity, GitOps, Backstage, monitoring and recovery.
+- AWS EKS/ECR helpers and IAM examples with explicit account, namespace and credential inputs.
+- Proxmox guest provisioning, GPU/kernel diagnostics, driver preparation, vGPU attachment and legacy DRAC5 console tooling.
+- A generic hardware/NAS/resource snapshot, a five-control-plane/eight-worker inventory example and a read-only Node resource checker.
+- Architecture, compatibility, troubleshooting, acceptance and contribution guides, plus automated tests and release packaging.
 
-## Boundaries
+### Verification record
 
-The on-prem implementation was supplied locally for this iteration and used as a reference. Its original inventory, vault, artifacts and deployment values are excluded from version control and the generic release. New configurations use project naming and operator-supplied values. The release helper excludes the entire reference/history tree; source links in the guides require the local copy.
+| Area | Result |
+|---|---|
+| Repository behavior | 23 automated tests passed, covering helper behavior, resource accounting, configuration, privacy and packaging |
+| Ansible configuration | All 15 playbooks passed syntax checks; 16 templates rendered and parsed in both optional-feature modes |
+| Shell helpers | All 17 shell helpers and the DRAC5 entrypoint passed syntax checks |
+| Den infrastructure evidence | Seven images reviewed: four Proxmox hypervisors, a TrueNAS system and 13 Ready Kubernetes nodes at kubelet v1.36.4 |
+| Worker resource snapshot | 64 CPU and 124.1 GiB allocatable memory recorded for the eight-worker scope |
+| Inventory membership | Two Kubernetes guest hosts and two infrastructure-only hypervisors represented separately |
+| Release archive | Public deliverables and license included; private references, inventories, credentials and runtime state excluded |
 
-No Backstage application source, proprietary driver/JDK/controller binaries or final applied GPU patch is distributed. The historical DRAC5 ZIP was unavailable; the new viewer reconstructs its confirmed architecture without claiming automatic login. No hardware/cloud deployment test was performed. Exact target versions, runtime AWS identity, database durability, physical measurements and GPU qualification remain operator inputs.
+The [validation report](docs/package-validation.md) provides the check details and reproduction commands. The [Den platform record](docs/den-case-study.md) documents the operational observations and their scope. The [acceptance guide](docs/acceptance.md) defines functional checks for deployments and changes.
 
-## Before public publication
+### Configuration and ownership
 
-- Choose a documentation/code license and add the corresponding license text. This draft does not choose legal terms on the owner's behalf.
-- Review branding/author attribution and any retained private topology examples.
-- Add redacted real build photos/measurements if desired; do not fabricate them.
-- Replace proposed stack fields with independently tested records when available.
-- Review archived source warnings: old commands and unresolved contradictions remain for provenance, not execution.
+Use the [automation guide](docs/automation.md) to select an inventory, fill in the private site contract and run phases in dependency order. Maintain one reconciling owner per resource when transferring bootstrap configuration to GitOps. Supply the selected application images, toolchain/driver packages and runtime credentials through the documented private inputs.
 
-## Validation report
+Public files use role-based identifiers, example domains and documentation addresses. Original screenshots, alias mappings, source inventories and vault material stay in ignored local/reference paths. The [source map](docs/automation-source-map.md) records how the on-prem implementation and chats inform the generic configuration.
 
-See [package-validation.md](docs/package-validation.md) for actual checks. Use `bash scripts/package-release.sh /absolute/path/forest-reforge.tar.gz` to create a generic archive after review. No remote deployment or hosted service was changed.
+### Build a release archive
+
+From the repository root, choose a new archive filename:
+
+```bash
+mkdir -p dist
+bash scripts/package-release.sh dist/forest-reforge-2026-10-28.tar.gz
+shasum -a 256 dist/forest-reforge-2026-10-28.tar.gz > dist/forest-reforge-2026-10-28.tar.gz.sha256
+tar -tzf dist/forest-reforge-2026-10-28.tar.gz
+```
+
+The packager includes `README.md`, `CONTRIBUTING.md`, `RELEASE.md`, `LICENSE`, guides, examples, assets, modules, scripts, automation and tests. It excludes raw references, private runtime files, local configuration, IDE state, virtual environments and bytecode. It refuses to overwrite an existing archive. Review the member list and checksum before publishing the release.
+
+### License
+
+Forest Reforge is distributed under the [GNU General Public License v3.0](LICENSE). Preserve the license and applicable third-party notices in distributions.

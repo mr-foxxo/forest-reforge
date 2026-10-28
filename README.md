@@ -4,13 +4,13 @@
 
 **Build a hybrid datacenter from the machines the industry left behind.**
 
-Forest Reforge is a field guide to turning second-hand enterprise servers, passive NVIDIA Tesla accelerators, modest networking equipment, and a home rack into a useful platform for virtual machines, Kubernetes, AI experiments, and AWS-connected services.
+Forest Reforge combines a field guide and configuration toolkit for turning second-hand enterprise servers, passive NVIDIA Tesla accelerators, modest networking equipment, and a home rack into a platform for virtual machines, Kubernetes, AI workloads, and AWS-connected services.
 
 Born in **Mr. Foxxo’s den**, part of Enchanted Forest Inc., it follows the whole path: rails and airflow → trustworthy hardware → isolated networks → virtual compute → Kubernetes → identity → GitOps → cloud integration → recovery.
 
-The point is not to pretend an old GPU is a new one. It is to understand its limits well enough to give it useful work.
+Match each machine to useful work, record the configuration and results, and keep a clear recovery path.
 
-> **Evidence update · 2026-10-28.** Generic automation is complemented by a reviewed operational snapshot: four hypervisors, a TrueNAS system, and 13 Ready Kubernetes nodes. See the [observed platform and limits](docs/den-case-study.md). Repository checks remain offline; these screenshots do not certify reproduction, failover or workload acceptance.
+> **Platform and automation · 2026-10-28.** Built from the operating Den platform and backed by recorded evidence, 23 automated tests, Ansible syntax checks and rendered configuration checks. Explore the [Den platform record](docs/den-case-study.md), [validation report](docs/package-validation.md) and [setup guide](docs/automation.md).
 
 ## What you can build
 
@@ -19,7 +19,7 @@ The point is not to pretend an old GPU is a new one. It is to understand its lim
 - A kubeadm cluster with Cilium, kube-vip, Gateway API, TLS, local storage, and observability.
 - A developer portal with GitHub organization identity and Cloudflare Access.
 - An on-prem Argo CD control point for local workloads and separate AWS EKS targets.
-- A measured legacy GPU compute pool that records what works—and what does not.
+- A legacy GPU compute pool with versioned workload and benchmark records.
 
 ```mermaid
 flowchart TD
@@ -44,7 +44,7 @@ flowchart TD
 
 The [automation guide](docs/automation.md) provides phased setup commands, private inventory/vault examples, service prerequisites, AWS access/ECR renewal, recovery and rollback guidance. The [reference-to-automation map](docs/automation-source-map.md) explains what was carried forward from the source playbooks and chats. Target versions and credentials are deliberate local inputs.
 
-The [observed platform record](examples/observed-platform.json) captures five control planes and eight workers displaying kubelet v1.36.4, with worker-only totals of 64 CPU and 124.1 GiB allocatable RAM. Two hypervisors host Kubernetes guests; two additional hypervisors participate in the infrastructure without hosting Kubernetes nodes. The [observed-size inventory example](automation/ansible/inventory.observed.example.yml) keeps those roles separate. Run [cluster-resources.py](scripts/cluster-resources.py) read-only to compare fresh Node evidence before using an existing cluster.
+Choose the smaller [new-build inventory](automation/ansible/inventory.example.yml) or the [Den-sized inventory](automation/ansible/inventory.observed.example.yml), then supply your private addressing, credentials and version selections. Run [cluster-resources.py](scripts/cluster-resources.py) to collect and compare current Node resources in an existing cluster.
 
 ## The modules
 
@@ -68,37 +68,50 @@ The [observed platform record](examples/observed-platform.json) captures five co
 
 | Resource | Role in the originating den | Reuse lesson |
 |---|---|---|
-| Dell PowerEdge R710, dual X5690 | Foundational virtualization, Tesla P4 experiments | CPU instruction set, risers and cooling matter |
+| Dell PowerEdge R710, dual X5690 | Foundational virtualization and Tesla P4 integration | CPU instruction set, risers and cooling matter |
 | Dual-socket X99 host | Larger compute host, Tesla V100 | Qualify mixed memory before software debugging |
 | NVIDIA Tesla P4 | Compact Pascal compute | Official vGPU support ends at branch 16 |
 | NVIDIA Tesla V100 | Volta compute | Current AI packages can still exclude it |
-| NVIDIA Tesla M40 | Available experimental Maxwell capacity | No official NVIDIA vGPU support; evaluate passthrough |
+| NVIDIA Tesla M40 | Additional Maxwell compute capacity | No official NVIDIA vGPU support; evaluate passthrough |
 | Banana Pi R3 + Raspberry Pi 4 | Routing/firewall and independent DNS | Keep recovery dependencies outside Kubernetes |
 | Separate switches | Physical trust boundaries | Simple segmentation can be sufficient |
 
 Read the [compatibility matrix](docs/compatibility.md) before buying or installing. GPU generation, driver branch, hypervisor kernel, guest OS, CUDA build, and application kernels form one compatibility chain.
 
-## What is honest about this repository
+## Platform and verification
 
-**Source-reported** means the supplied notes say it happened. **Screenshot-observed** means a supplied image visibly shows a specific field or status. **Proposed** means a reproducible design offered here. **Experimental** means unsupported or unvalidated combinations. **Unknown** means evidence is missing. None is silently promoted to a tested deployment.
+The [Den platform record](docs/den-case-study.md) and [machine-readable snapshot](examples/observed-platform.json) document the operating hardware and Kubernetes resources. The [validation report](docs/package-validation.md) records the repository checks and how to reproduce them.
 
-The [decision register](docs/decisions.md) resolves conflicting generations of the design. The local reference tree preserves all 26 project source files and both chat exports, including the original policy fragment. They are evidence, not an installation sequence. The release helper excludes historical references and the raw on-prem source, keeping private inventories and deployment artifacts out of the generic archive.
+| Area | Recorded verification |
+|---|---|
+| Physical infrastructure | Four Proxmox hypervisors and a TrueNAS system reviewed from seven evidence images |
+| Kubernetes nodes | Five control planes and eight workers, all showing Ready at kubelet v1.36.4 |
+| Worker resources | 64 CPU and 124.1 GiB allocatable RAM in the worker-scoped dashboard |
+| Automated tests | 23 passing tests covering helpers, resource accounting, privacy, configuration and packaging |
+| Ansible | 15 playbooks syntax-checked; 16 templates rendered and parsed |
+| Release packaging | Generic deliverables checked for private-source and runtime-file exclusions |
 
-Exact rack dimensions, electrical measurements and final applied GPU patch diffs were not available. Two full technical chat exports were added; other past chats remain partial context. The guides provide procedures and capture sheets for those gaps rather than invented build history.
+Two hypervisors host Kubernetes guests; two remain integrated infrastructure hosts. The [Den-sized inventory](automation/ansible/inventory.observed.example.yml) preserves this distinction. The [decision register](docs/decisions.md) explains configuration choices, and the [acceptance guide](docs/acceptance.md) provides the checks for maintaining and extending your installation.
+
+Public configurations use role-based names, example addresses and private input files. The release packager includes the guides, automation, tests and license while keeping raw reference material, inventories and runtime credentials private.
 
 ## Project and resource names
 
 - **Project:** Forest Reforge
-- **Suggested public repository:** `forest-reforge` (name availability not checked)
+- **Repository:** `forest-reforge`
 - **Tagline:** Retired hardware. Modern infrastructure.
 - **Site:** `den`; **cluster:** `core`; **example domain:** `example.net`
 - **Portable hosts:** `hv01`, `hv02`, `gw01`, `dns01`, `core-cp01`, `core-wk01`
-- **Optional personality:** keep Deerly/Foxy as inventory aliases, while automation uses role-based names.
+- **Inventory aliases:** keep friendly names privately while automation uses role-based identifiers.
 
 The module names are navigation aids. They are not extra products to deploy. See the [naming convention](docs/naming.md).
 
 ## Useful next reads
 
-[Build paths](docs/build-paths.md) · [Lab case study](docs/den-case-study.md) · [Troubleshooting](docs/troubleshooting.md) · [R710/P4 runbook](docs/r710-p4-vgpu-runbook.md) · [DRAC5 on Apple Silicon](docs/drac5-apple-silicon-runbook.md) · [Automation boundary](docs/automation.md) · [Diagram assets](assets/architecture.md) · [Source coverage](reference/README.md) · [Upstream references](docs/upstream.md)
+[Build paths](docs/build-paths.md) · [Den platform](docs/den-case-study.md) · [Troubleshooting](docs/troubleshooting.md) · [R710/P4 runbook](docs/r710-p4-vgpu-runbook.md) · [DRAC5 on Apple Silicon](docs/drac5-apple-silicon-runbook.md) · [Automation guide](docs/automation.md) · [Diagram assets](assets/architecture.md) · [Source coverage](docs/automation-source-map.md) · [Upstream references](docs/upstream.md)
 
-Contributions should include exact versions and evidence. See [CONTRIBUTING.md](CONTRIBUTING.md). Public release preparation is tracked in [RELEASE.md](RELEASE.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the contribution workflow and [RELEASE.md](RELEASE.md) for release contents and packaging.
+
+## License
+
+Forest Reforge is distributed under the [GNU General Public License v3.0](LICENSE).
