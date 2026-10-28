@@ -10,16 +10,18 @@ Forest Reforge combines thirteen infrastructure modules with phased configuratio
 - AWS EKS/ECR helpers and IAM examples with explicit account, namespace and credential inputs.
 - Proxmox guest provisioning, GPU/kernel diagnostics, driver preparation, vGPU attachment and legacy DRAC5 console tooling.
 - A generic hardware/NAS/resource snapshot, a five-control-plane/eight-worker inventory example and a read-only Node resource checker.
+- Observed VM placement, standalone-host quorum analysis, a validation/experiment ledger and two unchanged public Grafana screenshots with an integrity manifest.
 - Architecture, compatibility, troubleshooting, acceptance and contribution guides, plus automated tests and release packaging.
 
 ### Verification record
 
 | Area | Result |
 |---|---|
-| Repository behavior | 23 automated tests passed, covering helper behavior, resource accounting, configuration, privacy and packaging |
+| Repository behavior | Automated tests cover helper behavior, resource/placement accounting, public image integrity, configuration, privacy and packaging; see the validation report for results |
 | Ansible configuration | All 15 playbooks passed syntax checks; 16 templates rendered and parsed in both optional-feature modes |
 | Shell helpers | All 17 shell helpers and the DRAC5 entrypoint passed syntax checks |
-| Den infrastructure evidence | Seven images reviewed: four Proxmox hypervisors, a TrueNAS system and 13 Ready Kubernetes nodes at kubelet v1.36.4 |
+| Den infrastructure evidence | Seven baseline plus ten follow-up views reviewed; two clean Grafana originals versioned in assets with SHA-256 checksums |
+| Placement and runtime | Three/two control-plane and four/four worker host split observed; selected-node and Argo workload resource panels recorded |
 | Worker resource snapshot | 64 CPU and 124.1 GiB allocatable memory recorded for the eight-worker scope |
 | Inventory membership | Two Kubernetes guest hosts and two infrastructure-only hypervisors represented separately |
 | Release archive | Public deliverables and license included; private references, inventories, credentials and runtime state excluded |
@@ -30,7 +32,7 @@ The [validation report](docs/package-validation.md) provides the check details a
 
 Use the [automation guide](docs/automation.md) to select an inventory, fill in the private site contract and run phases in dependency order. Maintain one reconciling owner per resource when transferring bootstrap configuration to GitOps. Supply the selected application images, toolchain/driver packages and runtime credentials through the documented private inputs.
 
-Public files use role-based identifiers, example domains and documentation addresses. Original screenshots, alias mappings, source inventories and vault material stay in ignored local/reference paths. The [source map](docs/automation-source-map.md) records how the on-prem implementation and chats inform the generic configuration.
+Public files use role-based identifiers, example domains and documentation addresses. Two individually reviewed dashboard originals are published through the [asset manifest](assets/evidence.json); private screenshot views, alias mappings, source inventories and vault material stay in ignored local/reference paths. The [experiment ledger](docs/den-validations-experiments.md) and [source map](docs/automation-source-map.md) record how operational evidence and implementation references inform the generic configuration.
 
 ### Build a release archive
 

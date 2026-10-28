@@ -29,7 +29,7 @@
       "memory_used_gib": 50.34,
       "ksm_shared_gib": 8.95,
       "root_disk_total_gib": 93.93,
-      "root_disk_used_gib": 14.50,
+      "root_disk_used_gib": 14.5,
       "kernel": "7.0.14-16-pve",
       "pve_manager_version": "9.2.18",
       "boot_mode": "EFI"
@@ -74,8 +74,24 @@
     "memory_total_gib": 23.5,
     "memory_ecc_displayed": true,
     "pools": [
-      {"id": "pool01", "status": "ONLINE", "data_vdevs": 1, "disks": 1, "disks_with_errors": 0, "used_percent": 17.72, "free_space": "465.61 GiB"},
-      {"id": "pool02", "status": "ONLINE", "data_vdevs": 1, "disks": 1, "disks_with_errors": 0, "used_percent": 0.00, "free_space": "1.76 TiB"}
+      {
+        "id": "pool01",
+        "status": "ONLINE",
+        "data_vdevs": 1,
+        "disks": 1,
+        "disks_with_errors": 0,
+        "used_percent": 17.72,
+        "free_space": "465.61 GiB"
+      },
+      {
+        "id": "pool02",
+        "status": "ONLINE",
+        "data_vdevs": 1,
+        "disks": 1,
+        "disks_with_errors": 0,
+        "used_percent": 0.0,
+        "free_space": "1.76 TiB"
+      }
     ],
     "redundancy_validated": false,
     "backup_restore_validated": false
@@ -88,23 +104,189 @@
     "ready_node_count": 13,
     "control_plane_taints_per_node_displayed": 1,
     "worker_taints_per_node_displayed": 0,
-    "per_node_resources": null,
-    "guest_placement": null,
+    "per_node_resources": {
+      "scope": "Only core-cp01 is selected in the supplied Node (Pods) dashboard; values are display-rounded",
+      "nodes": {
+        "core-cp01": {
+          "cpu_cores": {
+            "capacity": 2,
+            "allocatable": 2
+          },
+          "memory_gib": {
+            "capacity": 7.76,
+            "allocatable": 7.66
+          }
+        }
+      }
+    },
+    "guest_placement": {
+      "evidence": "Visible Proxmox guest trees and running-guest summaries",
+      "hosts": {
+        "hv01": {
+          "control_plane": [
+            "core-cp01",
+            "core-cp02",
+            "core-cp03"
+          ],
+          "workers": [
+            "core-wk01",
+            "core-wk02",
+            "core-wk03",
+            "core-wk04"
+          ],
+          "other_running_guests": 1,
+          "templates": 1
+        },
+        "hv02": {
+          "control_plane": [
+            "core-cp04",
+            "core-cp05"
+          ],
+          "workers": [
+            "core-wk05",
+            "core-wk06",
+            "core-wk07",
+            "core-wk08"
+          ],
+          "other_running_guests": 0,
+          "templates": 1
+        }
+      },
+      "hypervisor_cluster_mode": "Both selected host dashboards display standalone nodes",
+      "quorum_analysis": {
+        "assumption": "All five displayed control-plane nodes are stacked-etcd voters",
+        "majority_required": 3,
+        "remaining_voters_after_hv01_loss": 2,
+        "remaining_voters_after_hv02_loss": 3,
+        "disruptive_test_performed": false
+      }
+    },
     "worker_resources": {
       "scope": "workers-only",
-      "cpu_cores": {"usage": 1.45, "requests": 7.88, "limits": 49.85, "allocatable": 64.00, "capacity": 64.00},
-      "memory_gib": {"usage": 17.2, "requests": 29.0, "limits": 99.0, "allocatable": 124.1, "capacity": 124.9},
-      "pods": {"usage": 116, "allocatable": 880, "capacity": 880},
+      "cpu_cores": {
+        "usage": 1.45,
+        "requests": 7.88,
+        "limits": 49.85,
+        "allocatable": 64.0,
+        "capacity": 64.0
+      },
+      "memory_gib": {
+        "usage": 17.2,
+        "requests": 29.0,
+        "limits": 99.0,
+        "allocatable": 124.1,
+        "capacity": 124.9
+      },
+      "pods": {
+        "usage": 116,
+        "allocatable": 880,
+        "capacity": 880
+      },
       "memory_display_tolerance_gib": 0.1
     }
   },
   "not_validated_by_screenshots": [
     "new_bootstrap_playbooks_match_the_running_installation",
-    "exact_vm_to_hypervisor_placement_and_per_node_allocations",
     "api_server_etcd_runtime_cni_and_chart_versions",
     "gpu_driver_profiles_guest_cuda_and_model_workloads",
     "physical_host_failover_and_etcd_quorum_recovery",
     "network_identity_tls_and_cloud_authorization_acceptance",
-    "application_data_and_off_host_backup_restore"
-  ]
+    "application_data_and_off_host_backup_restore",
+    "complete_per_node_resource_allocations_beyond_the_selected_core_cp01_view"
+  ],
+  "evidence_sets": [
+    {
+      "id": "initial-platform",
+      "reviewed_images": 7,
+      "publication": "Private originals; generic technical record"
+    },
+    {
+      "id": "infrastructure-dashboards",
+      "reviewed_images": 10,
+      "visible_graph_date": "2026-10-28",
+      "exact_capture_time": null,
+      "published_images": [
+        "assets/cluster_resources.png",
+        "assets/workloads.png"
+      ]
+    }
+  ],
+  "dashboard_observations": {
+    "scope_note": "Separate dashboard snapshots and queries; do not combine with earlier worker-only totals as one measurement.",
+    "cluster_compute": {
+      "time_range": "Last one hour UTC",
+      "cpu_utilization_percent": 6.15,
+      "cpu_requests_commitment_percent": 13.5,
+      "cpu_limits_commitment_percent": 52.2,
+      "memory_utilization_percent": 18.4,
+      "memory_requests_commitment_percent": 17.0,
+      "memory_limits_commitment_percent": 59.3
+    },
+    "node_overview": {
+      "time_range": "Last six hours UTC",
+      "visible_graph_date": "2026-10-28",
+      "memory_requests_gib": 27.7,
+      "memory_usage_gib": 40.9,
+      "allocation_total_omitted_reason": "Legend partly clipped in the source image"
+    },
+    "namespace_rows": {
+      "monitoring": {
+        "pods": 18,
+        "workloads": 6
+      },
+      "cert-manager": {
+        "pods": 6,
+        "workloads": 3
+      }
+    },
+    "argocd": {
+      "scope": "argocd namespace, last one hour UTC",
+      "visible_running_pods": {
+        "argocd-server": 2,
+        "argocd-applicationset-controller": 2,
+        "argocd-redis": 1,
+        "argocd-dex-server": 1,
+        "argocd-application-controller": 1
+      },
+      "additional_workload_series": [
+        "argocd-repo-server"
+      ],
+      "application_sync_test_recorded": false
+    },
+    "gpu_discovery": {
+      "scope": "core-cp01 Node (Pods) dashboard",
+      "metric_series": [
+        "node-feature-discovery-master",
+        "node-feature-discovery-worker"
+      ],
+      "gpu_device_allocation_or_cuda_test_shown": false
+    },
+    "cilium_policy_experiments": {
+      "namespace_metric_series": [
+        "cilium-test-1",
+        "cilium-test-ccnp1",
+        "cilium-test-ccnp2"
+      ],
+      "test_result_logs_supplied": false
+    }
+  },
+  "proxmox_datacenter_observations": {
+    "scope_note": "UI storage aggregates may include shared or duplicate storage entries; not unique physical disk capacity.",
+    "hv01": {
+      "online_nodes": 1,
+      "running_vms": 8,
+      "stopped_vms": 0,
+      "templates": 1,
+      "storage_total_tib": 3.38,
+      "storage_used_tib": 1.44
+    },
+    "hv02": {
+      "online_nodes": 1,
+      "running_vms": 6,
+      "stopped_vms": 0,
+      "templates": 1,
+      "storage_total_tib": 3.24,
+      "storage_used_tib": 1.07
+    }
+  }
 }

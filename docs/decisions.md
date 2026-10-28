@@ -11,6 +11,8 @@ These decisions govern the generic guides. Historical files preserve conflicting
 | CNI | Calico in early installation | Cilium and kube-proxy replacement |
 | Cluster scale | Earlier plans/counts differ; latest node screenshot shows 5 control planes + 8 workers, all Ready at v1.36.4 | Preserve observed scale in a separate example; retain smaller new-build default; five voters on two physical hosts do not imply host-resilient quorum |
 | Hypervisor membership | Four Proxmox panels; owner explicitly excludes two from Kubernetes hosting | Only hv01/hv02 count toward Kubernetes host capacity; hv03/hv04 remain integrated infrastructure |
+| VM placement and quorum | Follow-up guest trees now resolve placement previously left open | hv01 hosts cp01–03/wk01–04; hv02 hosts cp04–05/wk05–08; conditional five-voter quorum is asymmetric across the two standalone hosts |
+| Discovery versus GPU execution | Node-feature-discovery metrics now visible on core-cp01 | Record discovery component activity; keep GPU device allocation, licensing and CUDA/model results separate |
 | Current RAM | Older 196 GB description and mixed-memory history versus current panels | Use displayed 125.87/62.65 GiB for Kubernetes hosts; do not invent current DIMM populations or per-guest sizes |
 | Resource scope | Worker dashboard could be mistaken for whole-cluster capacity | 64 CPU / 124.1 GiB allocatable and 116 pods are worker-only observations |
 | NAS | Old inventory-only NAS entry versus current TrueNAS dashboard | Two ONLINE single-disk pools now observed; exports, redundancy and restore remain unproven |

@@ -56,7 +56,7 @@ Cilium documents L2 announcement limitations with `externalTrafficPolicy: Local`
 
 ## Expansion
 
-The screenshots reviewed on 2026-10-28 show **five control planes and eight workers, all Ready at kubelet v1.36.4**. The worker-only dashboard shows 64 CPU and 124.1 GiB allocatable RAM. See the [observed snapshot](../docs/den-case-study.md) for scope and limits; per-node resource sizes and hypervisor placement are not shown. The [observed-size inventory](../automation/ansible/inventory.observed.example.yml) represents this scale with generic identifiers. It is separate from the smaller new-build default.
+The screenshots reviewed on 2026-10-28 show **five control planes and eight workers, all Ready at kubelet v1.36.4**. The worker-only dashboard shows 64 CPU and 124.1 GiB allocatable RAM. Follow-up guest trees now establish a three/two control-plane and four/four worker split across the two standalone hypervisors, and one selected node has measured capacity/allocatable values. See the [validation and experiment ledger](../docs/den-validations-experiments.md) for the conditional etcd quorum calculation. The [observed-size inventory](../automation/ansible/inventory.observed.example.yml) represents this scale and placement with generic identifiers, separately from the smaller new-build default.
 
 Derive expected counts from the intended inventory and refresh evidence with [cluster-resources.py](../scripts/cluster-resources.py), rather than treating the screenshot as a universal baseline. Add nodes in stages: prepare OS/network, join, validate Ready/Cilium/storage, label/taint purpose, test a workload, then allow normal scheduling. The two infrastructure-only hypervisors are not extra cluster nodes or capacity.
 

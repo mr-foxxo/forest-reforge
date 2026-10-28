@@ -1,6 +1,6 @@
 # Validated stack record
 
-**Partial operational evidence is available; no complete GPU/host/workload tuple is certified.** The [reviewed platform snapshot](observed-platform.json) establishes displayed host versions/resources and 13 Ready nodes at kubelet v1.36.4. It does not supply driver checksums, guest/runtime versions, placement, workloads or recovery results. Fill one record per GPU/host/workload combination. Do not use a “works” badge with missing fields.
+**Operational evidence is recorded per component.** The [platform snapshot](observed-platform.json) establishes host/node fields and now includes VM placement, selected core-cp01 resources, Argo runtime metrics and discovery-component activity. The [experiment ledger](../docs/den-validations-experiments.md) links those observations to the next functional checks. Fill the driver checksums, guest/runtime versions, CUDA/model and recovery results for each GPU/host/workload tuple; keep its evidence specific to the tested combination.
 
 ```yaml
 record_id: REQUIRED

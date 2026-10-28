@@ -2,7 +2,7 @@
 
 Automation: `lookout` installs monitoring and optional logging/secrets controllers; `backup` schedules [etcd-backup.sh](../scripts/etcd-backup.sh). [cluster-troubleshoot.sh](../scripts/cluster-troubleshoot.sh) collects layer-specific conditions without Secret contents. See the [recovery guide](../docs/automation.md).
 
-The [observed worker dashboard](../docs/den-case-study.md) establishes scoped CPU/memory/pod readings, not the metrics backend, query provenance or retention. [cluster-resources.py](../scripts/cluster-resources.py) refreshes Node counts/readiness/capacity without reading workloads or Secrets; usage/requests/limits still need a separate scoped metrics capture. NAS ONLINE status and green scrub indicators do not replace an independent restore test.
+The [Den validations and experiments](../docs/den-validations-experiments.md) now include versioned Grafana cluster and Argo workload screenshots, plus observed VM placement and a selected-node resource view. Record each panel's selector, time range, units and query separately from the earlier worker-only dashboard. [cluster-resources.py](../scripts/cluster-resources.py) refreshes Node counts/readiness/capacity without reading workloads or Secrets; it does not collect dashboard queries. NAS ONLINE status and green scrub indicators remain separate from an independent restore result.
 
 ## Observe the whole chain
 

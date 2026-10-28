@@ -26,7 +26,7 @@ Forest Reforge separates the physical facility, management plane, workload plane
 
 The source files contain both successful-execution statements and outstanding acceptance lists. A playbook described as implemented is not proof that every failover, restore, security boundary or workload has passed.
 
-The local reference tree includes the earlier source notes/chats and seven operational screenshots reviewed on 2026-10-28. Raw images contain private hostnames and remain ignored/excluded from releases. The [generic observation record](../examples/observed-platform.json) and [case study](den-case-study.md) publish selected technical facts without those identifiers. Private aliases and source hashes are retained under ignored `local/den-evidence/` for traceability.
+The local reference tree includes the earlier source notes/chats, the seven-image baseline and ten follow-up infrastructure views reviewed on 2026-10-28. Two clean dashboard originals are versioned under [public assets](../assets/README.md); private source views remain ignored/excluded from releases. The [observation record](../examples/observed-platform.json), [case study](den-case-study.md) and [experiment ledger](den-validations-experiments.md) publish selected technical facts with generic identifiers. Private aliases and source hashes remain under ignored `local/den-evidence/`.
 
 ## Canonical example topology
 
@@ -40,7 +40,7 @@ Three control-plane VMs on one physical host protect against some VM failures, n
 
 Two cloudflared replicas on one host have the same limitation. Two PSUs on one PDU do not make two power paths. LocalPV is not distributed storage. A second DNS process on the same failing disk is not independent DNS recovery.
 
-The reviewed Den snapshot has five control planes and eight workers hosted within a two-hypervisor Kubernetes scope. Two other integrated hypervisors do not host cluster nodes and must not be counted as Kubernetes capacity or quorum failure domains. Current per-VM placement is not visible; do not infer it from earlier inventory notes. The NAS's two ONLINE single-disk pool views do not establish redundant storage or Kubernetes storage integration.
+The reviewed Den snapshot has five control planes and eight workers. Follow-up Proxmox guest trees show three control planes/four workers on hv01 and two control planes/four workers on hv02, each a standalone hypervisor. With five stacked-etcd voters this split loses majority if hv01 is lost, and retains three voters if hv02 is lost; verify actual membership and test recovery. Two integrated infrastructure-only hypervisors remain outside the Kubernetes capacity/quorum scope. The NAS's ONLINE single-disk pool views do not establish replicated Kubernetes storage.
 
 ## Delivery ownership
 

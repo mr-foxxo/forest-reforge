@@ -1,6 +1,8 @@
-# The Den: observed platform and remaining acceptance
+# The Den: observed platform
 
-Reviewed **2026-10-28** from seven supplied screenshots and the owner's clarification of infrastructure membership. The images do not establish an absolute capture date, so this is a reviewed snapshot rather than a live inventory. Hardware/software values below are visible observations. Role-based IDs replace private hostnames; raw screenshots and their private alias/hash record stay outside the release.
+Reviewed **2026-10-28** from the initial seven-image baseline and ten follow-up infrastructure views, plus the owner's clarification of infrastructure membership. The baseline images lack an absolute capture time; follow-up graph axes display 2026-10-28. Hardware/software values below retain their source-view scope. Role-based IDs replace private hostnames. Two clean dashboard originals are versioned under [assets](../assets/README.md); private views and alias/hash provenance remain local.
+
+The follow-up [validations and experiment ledger](den-validations-experiments.md) adds observed VM placement, standalone Proxmox topology, cluster/namespace metrics, a selected control-plane resource view, and Argo CD workload counts with public screenshots.
 
 ## Physical infrastructure
 
@@ -39,7 +41,9 @@ The node list shows **13 Ready nodes**, all displaying **kubelet v1.36.4**:
 | core-cp01 through core-cp05 | 5 control planes | 5 | 1 |
 | core-wk01 through core-wk08 | 8 workers | 8 | 0 |
 
-The taint key/effect is not visible, and node age is not uptime. The list shows neither per-node CPU/RAM/disk allocations nor placement across physical hosts. Earlier per-VM sizing and placement remain historical until a fresh private Proxmox VM listing is reconciled with Kubernetes node evidence. Five control-plane nodes do not prove that loss of either physical Kubernetes host preserves etcd quorum.
+The taint key/effect is not visible, and node age is not uptime. The later Proxmox views establish placement: **hv01 hosts core-cp01–03 and core-wk01–04; hv02 hosts core-cp04–05 and core-wk05–08**. Both hosts display standalone Proxmox datacenters. The selected core-cp01 metrics view shows 2 CPU capacity/allocatable and 7.76/7.66 GiB memory capacity/allocatable. Other nodes' exact allocations still need export; do not generalize from one selected node.
+
+For five stacked-etcd voters, this three/two split requires three remaining voters. Loss of hv01 would leave two, while loss of hv02 would leave three. Verify actual etcd membership and perform controlled recovery-backed tests; the [experiment ledger](den-validations-experiments.md#vm-placement-and-failure-domains) records this conditional topology analysis separately from a completed failure test.
 
 The resource dashboard is explicitly filtered to **Worker Nodes**. It reports:
 
@@ -56,13 +60,14 @@ At that instant, aggregate requests left **56.12 CPU and about 95.1 GiB worker a
 | Claim | Current evidence | Remaining gate |
 |---|---|---|
 | Four hypervisors exist with the displayed CPU/RAM/versions | Host summary screenshots | Export exact packages, datastore/guest inventory, headers and driver state |
-| Two hypervisors host Kubernetes; two are infrastructure only | Owner clarification, consistent with supplied platform scope | Reconcile VM IDs/placement privately; test failure-domain assumptions |
+| Two hypervisors host Kubernetes; two are infrastructure only | Owner clarification and follow-up Proxmox guest trees; thirteen guests mapped | Verify etcd membership and test the observed three/two voter failure budget |
 | NAS dashboard and two pools are online | TrueNAS dashboard | Export/permission checks, scrub details, backup and isolated restore |
 | Five control planes and eight workers report Ready at v1.36.4 | Kubernetes node list | API server/etcd/runtime versions, DNS/CNI paths, storage and failure tests |
-| Worker resource totals and usage are visible | Worker-filtered dashboard | Fresh exact Node quantities, requests/limits provenance and load/placement tests |
+| Worker resource totals and usage are visible | Worker-filtered dashboard; follow-up cluster/namespace views | Preserve separate query scopes, refresh exact quantities and run bounded load tests |
+| Argo and discovery components have runtime metrics | Public Argo workload screenshot and private selected-node view | Record application sync/authorization and GPU device/CUDA results separately |
 | Generic automation can reproduce the running environment | Not established by these images | Run the new implementation on a disposable target with a complete pinned contract |
 
-The new [machine-readable observation](../examples/observed-platform.json) preserves these facts without operational identifiers. The [observed-size example inventory](../automation/ansible/inventory.observed.example.yml) models all four hypervisors, the NAS, five control planes and eight workers with documentation addresses and no invented guest placement. The smaller default inventory remains a separate new-build example.
+The [machine-readable observation](../examples/observed-platform.json) preserves these facts without operational identifiers. The [observed-size inventory](../automation/ansible/inventory.observed.example.yml) models all four hypervisors, the NAS, five control planes and eight workers with documentation addresses. Its `reforge_hypervisor` fields now record the observed guest placement as metadata; they do not migrate or provision VMs. The smaller default inventory remains a separate new-build example.
 
 ## Refresh the evidence before use
 
@@ -81,4 +86,4 @@ python scripts/cluster-resources.py --nodes-json local/nodes.json \
 
 The helper emits aggregate role counts, Ready state, kubelet versions and CPU/memory/pod capacity without node names, addresses, annotations or credentials. It performs no writes to Kubernetes and does not read Secrets or Pod specs. Exit 0 means the requested inventory/resource checks passed; 1 means a health/snapshot difference; 2 means collection/input failure. A deliberate later upgrade can differ from this snapshot without being a defect. For another installation, supply your own reviewed profile or omit `--expect`.
 
-The Node API cannot refresh the screenshot's usage/requests/limits; collect those separately from your chosen metrics source and record its scope/query/time. Reconcile hypervisor VM placement privately before claiming host-resilient quorum or scheduling more workloads. Then complete the [acceptance matrix](acceptance.md), especially GPU workload, network/identity rejection, independent data restore and controlled failover. Hardware, pool and Node observations close inventory gaps; they do not close those functional gates.
+The Node API cannot refresh dashboard usage/requests/limits; collect those separately and record scope/query/time. Use the observed placement and actual etcd membership when planning capacity or maintenance. The [experiment ledger](den-validations-experiments.md) links collected metrics to the next bounded workload, GitOps, GPU and failure-domain exercises. Complete the corresponding [acceptance checks](acceptance.md) and retain their results alongside the hardware and runtime evidence.

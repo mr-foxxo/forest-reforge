@@ -10,7 +10,7 @@ Born in **Mr. Foxxo’s den**, part of Enchanted Forest Inc., it follows the who
 
 Match each machine to useful work, record the configuration and results, and keep a clear recovery path.
 
-> **Platform and automation · 2026-10-28.** Built from the operating Den platform and backed by recorded evidence, 23 automated tests, Ansible syntax checks and rendered configuration checks. Explore the [Den platform record](docs/den-case-study.md), [validation report](docs/package-validation.md) and [setup guide](docs/automation.md).
+> **Platform and automation · 2026-10-28.** Built from the operating Den platform and backed by recorded evidence, automated tests, Ansible syntax checks and rendered configuration checks. Explore the [Den platform record](docs/den-case-study.md), [validations and experiments](docs/den-validations-experiments.md), [validation report](docs/package-validation.md) and [setup guide](docs/automation.md).
 
 ## What you can build
 
@@ -84,14 +84,17 @@ The [Den platform record](docs/den-case-study.md) and [machine-readable snapshot
 
 | Area | Recorded verification |
 |---|---|
-| Physical infrastructure | Four Proxmox hypervisors and a TrueNAS system reviewed from seven evidence images |
+| Physical infrastructure | Four Proxmox hypervisors and a TrueNAS system across 17 reviewed source views |
+| Runtime and placement | Thirteen guests mapped across two standalone hosts; cluster and Argo workload screenshots versioned in assets |
 | Kubernetes nodes | Five control planes and eight workers, all showing Ready at kubelet v1.36.4 |
 | Worker resources | 64 CPU and 124.1 GiB allocatable RAM in the worker-scoped dashboard |
-| Automated tests | 23 passing tests covering helpers, resource accounting, privacy, configuration and packaging |
+| Automated tests | Passing tests cover helpers, resource accounting, placement consistency, public image integrity, privacy, configuration and packaging |
 | Ansible | 15 playbooks syntax-checked; 16 templates rendered and parsed |
 | Release packaging | Generic deliverables checked for private-source and runtime-file exclusions |
 
 Two hypervisors host Kubernetes guests; two remain integrated infrastructure hosts. The [Den-sized inventory](automation/ansible/inventory.observed.example.yml) preserves this distinction. The [decision register](docs/decisions.md) explains configuration choices, and the [acceptance guide](docs/acceptance.md) provides the checks for maintaining and extending your installation.
+
+The [validation and experiment ledger](docs/den-validations-experiments.md) presents the observed host split, monitoring, Argo runtime and discovery-layer results with [public dashboard screenshots](assets/README.md). Each experiment records its scope and the next reproducible check.
 
 Public configurations use role-based names, example addresses and private input files. The release packager includes the guides, automation, tests and license while keeping raw reference material, inventories and runtime credentials private.
 

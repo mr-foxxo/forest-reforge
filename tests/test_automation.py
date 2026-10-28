@@ -89,6 +89,7 @@ class Helpers(unittest.TestCase):
                 (folder / name).write_text("public\n")
             script = folder / "scripts/package-release.sh"
             script.write_text((ROOT / "scripts/package-release.sh").read_text())
+            (folder / "assets/public-evidence.png").write_bytes(b"PUBLIC_ASSET_FIXTURE")
             for name in ("reference/integration_onprem/vault.yml", "local/secrets.yml",
                          "reference/den-evidences/nodes.png", "local/den-evidence/record.json",
                          "automation/drac5/private/runtime/vkvm.jnlp", "automation/drac5/.env"):
@@ -100,6 +101,7 @@ class Helpers(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             with tarfile.open(archive) as package:
                 self.assertEqual(package.extractfile("forest-reforge/LICENSE").read(), (folder / "LICENSE").read_bytes())
+                self.assertEqual(package.extractfile("forest-reforge/assets/public-evidence.png").read(), b"PUBLIC_ASSET_FIXTURE")
                 for member in package.getmembers():
                     if member.isfile():
                         self.assertNotIn(b"PRIVATE_SENTINEL", package.extractfile(member).read())

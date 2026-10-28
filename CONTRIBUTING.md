@@ -8,6 +8,8 @@ Read the relevant [module](README.md#the-modules), [naming conventions](docs/nam
 
 Write documentation in English. Use role-based hostnames, example domains, documentation addresses and dummy account IDs in public files. Keep private inventory, credentials, raw evidence and runtime artifacts in the ignored `local/` or `reference/` trees. Keep secrets out of command output, diffs, screenshots and pull-request descriptions.
 
+For screenshots, review both visible content and embedded metadata before copying publishable originals into `assets`. Register public evidence images and their SHA-256 values in [assets/evidence.json](assets/evidence.json), and link them from the relevant record with the dashboard scope/time range. Keep private originals and alias mappings separately. Follow [the current evidence examples](assets/README.md); preserve measured pixels and identify any future redacted derivative explicitly.
+
 Preserve the distinction between Kubernetes guest nodes, Kubernetes-hosting hypervisors and infrastructure-only hosts. Resource records must identify whether their scope is a physical host, control planes, workers or the whole cluster. Record evidence review dates separately from capture times, and retain the original measurement units.
 
 ## Record useful evidence

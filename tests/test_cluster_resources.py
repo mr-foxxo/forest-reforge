@@ -126,6 +126,18 @@ class ClusterResources(unittest.TestCase):
         self.assertFalse(inventory["vars"]["reforge_inventory_reviewed"])
         included = {host["id"] for host in self.expected["hypervisors"] if host["kubernetes_guest_host"]}
         self.assertEqual(included, {"hv01", "hv02"})
+        placements = self.expected["kubernetes"]["guest_placement"]["hosts"]
+        self.assertEqual(set(placements), included)
+        mapped = []
+        for hypervisor, placement in placements.items():
+            for role, group in (("control_plane", "control_plane"), ("workers", "workers")):
+                for guest in placement[role]:
+                    mapped.append(guest)
+                    self.assertEqual(canopy[group]["hosts"][guest]["reforge_hypervisor"], hypervisor)
+        self.assertEqual(set(mapped), guests)
+        self.assertEqual(len(mapped), len(set(mapped)))
+        self.assertEqual(len(placements["hv01"]["control_plane"]), 3)
+        self.assertEqual(len(placements["hv02"]["control_plane"]), 2)
 
 
 if __name__ == "__main__":

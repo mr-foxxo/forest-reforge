@@ -1,6 +1,6 @@
 # Acceptance, rollback and release evidence
 
-All tests below remain operator tasks unless a specific result is recorded. The [reviewed snapshot](den-case-study.md) establishes hardware/version fields, ONLINE NAS pools and 13 Ready Kubernetes nodes, with worker-only resource totals. It does not establish failover, restore, network/identity rejection, GPU workloads or successful reproduction by the new playbooks. No live acceptance tests were run by this repository update.
+The [platform record](den-case-study.md) establishes hardware/version fields, ONLINE NAS pools and 13 Ready Kubernetes nodes, with worker-only totals. Follow-up [validations and experiments](den-validations-experiments.md) add VM placement, standalone hypervisor topology, Grafana resource metrics, selected-node sizing and Argo runtime counts. The ledger separates each collected result from the functional test that follows it. Failover, restore, network/identity rejection, CUDA/model execution and fresh bootstrap reproduction use the gates below.
 
 | Gate | Positive test | Negative/failure test | Evidence |
 |---|---|---|---|

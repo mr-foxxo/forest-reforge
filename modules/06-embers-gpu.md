@@ -4,6 +4,8 @@ Helpers: `embers` installs selected prerequisites; [gpu-diagnose.sh](../scripts/
 
 Read [the compatibility matrix](../docs/compatibility.md) first. Choose a single card and a single workload before constructing a shared GPU platform.
 
+The [Den experiment ledger](../docs/den-validations-experiments.md#experiment-ledger) now records node-feature-discovery master/worker metrics in a selected control-plane view. This is concrete discovery-component evidence. Continue with GPU-node PCI/label/device-resource inspection and a CUDA workload before recording driver, device-plugin, vGPU or model success.
+
 ## Choose an exposure model
 
 | Model | Ownership | Benefit | Cost/limit |

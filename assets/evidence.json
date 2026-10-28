@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "reviewed_on": "2026-10-28",
+  "publication_policy": "Unmodified screenshots individually reviewed for public use. Private originals remain in ignored reference storage.",
+  "images": [
+    {
+      "file": "cluster_resources.png",
+      "title": "Cluster compute resources",
+      "scope": "Cluster dashboard, last one hour UTC",
+      "demonstrates": [
+        "CPU and memory utilization/commitment",
+        "Namespace resource metrics for Argo CD, Backstage, cert-manager and monitoring"
+      ],
+      "documentation": "../docs/den-validations-experiments.md",
+      "sha256": "e1ce6c53ce143ec72a7265916c5f76004322c13cbb79cba1b3c4c3f84d46330f"
+    },
+    {
+      "file": "workloads.png",
+      "title": "Argo CD workload resources",
+      "scope": "argocd namespace, last one hour UTC",
+      "demonstrates": [
+        "Workload CPU and memory series",
+        "Visible running Pod counts for five Argo components"
+      ],
+      "documentation": "../docs/den-validations-experiments.md",
+      "sha256": "30c311eb04c090f2a2dd4bf9b9d2ea06f01cda22cf37d54e6a9bdce980857bfa"
+    }
+  ]
+}
