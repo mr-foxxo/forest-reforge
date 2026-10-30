@@ -4,6 +4,10 @@
 
 Registro da revisão original de **28/10/2026**. Verificações offline do repositório e observações de screenshots têm escopo diferente da aceitação de uma implantação. Os números abaixo descrevem aquela revisão; não são uma execução automática ao ler este documento.
 
+Atualização de conciliação em **30/10/2026**: os [guias de inventário nos dois idiomas](den-inventory.md) e o perfil compartilhado agora registram alocações declaradas das treze VMs, plataformas e entradas independentes de infraestrutura. A unidade da RAM continua não informada. Valores das tabelas EN/pt-BR e metadados YAML são conferidos com o registro comum; medições anteriores dos Nodes permanecem separadas.
+
+Nesta atualização, os 25 testes passaram novamente, `main.yml` teve sintaxe aprovada com o inventário da Toca atualizado, e links/blocos de código foram conferidos em 78 arquivos Markdown EN/pt-BR. As treze linhas de alocação e os totais por função/host coincidem entre as duas tabelas, JSON e YAML.
+
 ## Verificações registradas
 
 - 25 testes offline: helpers, comandos AWS simulados, contratos de configuração/identidade, recursos e posicionamento, integridade de imagens, privacidade e empacotamento.

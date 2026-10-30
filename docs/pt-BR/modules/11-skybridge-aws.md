@@ -8,9 +8,9 @@ As fontes identificam Forest e FoxByte, dev ativo e produção dormente, sem sta
 
 Inventarie Organizations/OUs/contas antes de criar recursos. Separe administração organizacional de deploy, proteja recuperação root/MFA, use acesso humano temporário, budgets, auditoria e tags. Registre custos e teardown de EKS, NAT, VPN, LB, logs e armazenamento.
 
-Escolha CIDRs não sobrepostos e rotas de ida/volta. Verifique túneis VPN, DNS, security groups, firewall, MTU e modo de endpoint EKS. Endpoint privado requer resolução/rota do Den; público restrito requer origem permitida estável.
+Escolha CIDRs não sobrepostos e rotas de ida/volta. Verifique túneis VPN, DNS, security groups, firewall, MTU e modo de endpoint EKS. Endpoint privado requer resolução/rota da Toca; público restrito requer origem permitida estável.
 
-**VPC peering não oferece trânsito.** Não presuma caminho Den → VGW na VPC A → peering → VPC B. Projete conectividade suportada por destino e resolvers explicitamente.
+**VPC peering não oferece trânsito.** Não presuma caminho Toca → VGW na VPC A → peering → VPC B. Projete conectividade suportada por destino e resolvers explicitamente.
 
 ## Cadeia de autenticação Argo
 

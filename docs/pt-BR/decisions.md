@@ -14,6 +14,8 @@ Estas decisões orientam os exemplos genéricos. Documentos históricos podem co
 | Hosts | Só hv01/hv02 hospedam Kubernetes; hv03/hv04 são infraestrutura |
 | Posicionamento | hv01: cp01–03/wk01–04; hv02: cp04–05/wk05–08; quórum físico assimétrico |
 | RAM | Usar 125,87/62,65 GiB exibidos nos hosts Kubernetes; sem inferir DIMMs |
+| Inventário atual | Plataformas T310/T410 somente de infraestrutura; 14 vCPU nos control planes, 64 nos workers e nota V100 em core-wk05, com fonte de inventário |
+| RAM declarada/medida | A fonte soma 152 para workers sem informar unidade; painel anterior mostra 124,9/124,1 GiB capacity/allocatable. Confirmar unidade/configuração atual, sem substituir medições por declarações |
 | Recursos | 64 CPU, 124,1 GiB alocáveis e 116 pods são dados restritos a workers |
 | NAS | Dois pools ONLINE de um disco; exportação, redundância e restauração não demonstradas |
 | DNS/TLS | Cloudflare é o caminho posterior à migração; Route 53 é alternativa |

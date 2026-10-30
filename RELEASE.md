@@ -6,6 +6,12 @@
 
 English remains the default. Releases also include `README.pt-BR.md`, `CONTRIBUTING.pt-BR.md`, `RELEASE.pt-BR.md` and adapted Brazilian Portuguese guides under `docs/pt-BR/`. The [English](docs/README.md) and [Portuguese](docs/pt-BR/README.md) indexes link every paired document. Executable examples, automation and evidence assets remain shared.
 
+## 2026-10-30 · Operator inventory reconciliation
+
+The English and Brazilian Portuguese guides now include the current generic infrastructure inventory and all thirteen Kubernetes VM allocations. The operator inventory identifies the T310/T410 infrastructure-only platforms and PowerEdge 2950 NAS, confirms guest placement, and records 14 control-plane plus 64 worker vCPUs with a V100 note on core-wk05.
+
+The [inventory guide](docs/den-inventory.md) and [Portuguese counterpart](docs/pt-BR/den-inventory.md) retain the source RAM values without inventing a unit. The shared JSON and Den-sized example carry descriptive allocation metadata separately from the earlier measured Node capacity/allocatable values. Original aliases and addresses remain private. Paired indexes, platform/experiment records, modules and automation guidance are updated together.
+
 ## 2026-10-28 · Platform evidence and automation
 
 Forest Reforge combines thirteen infrastructure modules with phased configuration, operational helpers and a documented Den platform. Public examples follow the project's naming conventions and use generic addresses and private configuration inputs.

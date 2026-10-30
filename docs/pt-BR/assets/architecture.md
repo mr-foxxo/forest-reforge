@@ -16,7 +16,7 @@ flowchart TD
   Tunnel --> Gateway["Gateway HTTPS Cilium"]
   Gateway --> Backstage["Backstage com autorização própria"]
   Private --> Argo["Argo CD"]
-  Argo --> Den["Workloads do Den"]
+  Argo --> Den["Workloads da Toca"]
   Argo --> EKS["Destinos EKS limitados"]
 ```
 
@@ -43,7 +43,7 @@ flowchart TD
 flowchart TD
   Bootstrap["Ansible: base e segredos iniciais"] --> Root["Aplicação raiz Argo"]
   Root --> Projects["AppProjects e aplicações filhas"]
-  Projects --> Local["Recursos de execução do Den"]
+  Projects --> Local["Recursos de execução da Toca"]
   Projects --> Cloud["Recursos de execução AWS"]
   External["Configuração externa de contas e IAM"] --> Cloud
   Secret["Autoridade de segredos escolhida"] --> Local

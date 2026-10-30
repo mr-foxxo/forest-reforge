@@ -2,7 +2,7 @@
 
 [English (default)](../acceptance.md) | [Português (Brasil)](acceptance.md) | [Índice](README.md)
 
-O [registro do Den](den-case-study.md) comprova campos observados de hardware, pools ONLINE e 13 nós Ready. As [validações complementares](den-validations-experiments.md) acrescentam posicionamento de VMs e métricas. Failover, restauração, rejeição de acesso e execução CUDA/modelos exigem resultados funcionais próprios.
+O [registro da Toca](den-case-study.md) comprova campos observados de hardware, pools ONLINE e 13 nós Ready. As [validações complementares](den-validations-experiments.md) acrescentam posicionamento de VMs e métricas. Failover, restauração, rejeição de acesso e execução CUDA/modelos exigem resultados funcionais próprios.
 
 | Área | Teste positivo | Teste negativo ou de falha | Evidência |
 |---|---|---|---|

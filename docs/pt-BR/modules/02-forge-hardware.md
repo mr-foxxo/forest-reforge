@@ -4,6 +4,8 @@
 
 Use os helpers compartilhados [host-audit.sh](../../../scripts/host-audit.sh) e [gpu-diagnose.sh](../../../scripts/gpu-diagnose.sh). O [snapshot](../den-case-study.md) melhora o dimensionamento, sem provar estabilidade de DIMMs, potência ou workloads GPU.
 
+O [inventário atual](../den-inventory.md) identifica hv03 como Dell PowerEdge T310, hv04 como T410 e nas01 como PowerEdge 2950. T310/T410 são infraestrutura integrada sem hospedar Kubernetes. Mantenha as descrições de plataforma separadas da RAM medida nos painéis e dos resultados de workloads GPU.
+
 ## R710 e CPU
 
 O relato descreve R710 revisão II, dois X5690, fontes 870 W, iDRAC6 Enterprise, Riser 2 x16 e uma P4 instalada. Registre revisão do manual, part number do riser, pinagem/limite do slot, bracket, firmware e refrigeração. Slot x16 físico não prova potência nem número de lanes.

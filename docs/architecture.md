@@ -22,6 +22,7 @@ Forest Reforge separates the physical facility, management plane, workload plane
 
 - **Source-reported:** supplied operational documentation or visible chat says this was implemented or observed; not verified against live equipment here.
 - **Screenshot-observed:** a supplied dashboard/node view visibly establishes a field or state at capture. Its review date is not necessarily its capture date, and it does not prove a recovery or workload test passed.
+- **Inventory-declared:** the operator-maintained inventory records platform identity, placement or VM allocations. Unspecified units remain unspecified; configured values and measured Node capacity are separate records.
 - **Proposed:** a generic design or procedure synthesized for readers.
 - **Experimental:** requires qualification, may lack vendor support.
 - **Unknown:** records do not settle it.
@@ -43,6 +44,8 @@ Three control-plane VMs on one physical host protect against some VM failures, n
 Two cloudflared replicas on one host have the same limitation. Two PSUs on one PDU do not make two power paths. LocalPV is not distributed storage. A second DNS process on the same failing disk is not independent DNS recovery.
 
 The reviewed Den snapshot has five control planes and eight workers. Follow-up Proxmox guest trees show three control planes/four workers on hv01 and two control planes/four workers on hv02, each a standalone hypervisor. With five stacked-etcd voters this split loses majority if hv01 is lost, and retains three voters if hv02 is lost; verify actual membership and test recovery. Two integrated infrastructure-only hypervisors remain outside the Kubernetes capacity/quorum scope. The NAS's ONLINE single-disk pool views do not establish replicated Kubernetes storage.
+
+The [current inventory](den-inventory.md) confirms this placement and declares 78 Kubernetes VM vCPUs: 22 on hv01 and 56 on hv02. Its RAM column lacks a unit, so those sums are not physical GiB or scheduler headroom. Infrastructure, OOB and the management entry remain outside the thirteen-node resource totals.
 
 ## Delivery ownership
 

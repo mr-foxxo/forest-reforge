@@ -20,7 +20,7 @@ VM na bridge Servers participa daquele L2; VM em outra bridge não anuncia autom
 
 Use imagem/checksum fixados, cloud-init, VirtIO, guest agent, recursos definidos, MAC/IP estáveis, DNS/NTP conhecidos e chaves SSH. Clone antes de kubeadm para garantir identidade única. CPU `host` ajuda instruções mas limita migração heterogênea. GPU passthrough vincula VM ao dispositivo salvo suporte de migração comprovado. Verifique NUMA e localidade PCI/memória.
 
-As [observações](../den-validations-experiments.md) mapeiam convidados entre hv01/hv02, mas não dimensionam todos igualmente. Reserve memória para hosts, caches e outros convidados; KSM e RAM de infraestrutura não aumentam alocável Kubernetes.
+O [inventário atual](../den-inventory.md) declara 2 vCPU em core-cp01–03, 4 em core-cp04–05 e workers heterogêneos somando 64 vCPU. Convidados Kubernetes totalizam 22 vCPU em hv01 e 56 em hv02. A coluna RAM não informa unidade; somas de 104 e 88 por host não são diretamente comparáveis aos 125,87/62,65 GiB físicos dos painéis anteriores. Confira unidade/configuração atual antes de dimensionar. Os 7,66 GiB alocáveis medidos em core-cp01 e os 124,1 GiB do painel de workers permanecem registros separados. Reserve memória para hosts, caches e outros convidados; KSM não é RAM física adicional.
 
 ## Kernel, passthrough e recuperação
 

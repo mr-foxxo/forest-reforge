@@ -12,6 +12,8 @@ Use `python scripts/cluster-resources.py --context YOUR_CONTEXT --expect example
 
 The [observed-size inventory](../automation/ansible/inventory.observed.example.yml) is an alternative to the smaller new-build inventory. Copy one example deliberately; both use documentation-only addresses and remain unreviewed by default. `kubernetes_hypervisors` and `infrastructure_only_hypervisors` are separate children of `burrows`; only guest nodes belong to `canopy`. The infrastructure-only hosts remain eligible for explicitly selected hypervisor maintenance, not automatic Kubernetes joins. `reforge_hypervisor` records the observed guest placement as metadata, without provisioning or migrating VMs.
 
+The [inventory review of 2026-10-30](den-inventory.md) also adds descriptive `reforge_inventory_vcpus`, `reforge_inventory_ram_value` and optional `reforge_inventory_gpu` fields. `reforge_inventory_ram_unit` remains empty because the source gives no RAM unit. These fields do not resize guests or configure devices. Declared VM allocations do not replace the earlier measured values used by the Node comparison profile.
+
 Use the screenshot's v1.36.4 as an observed kubelet version, not proof of the API server, Debian package revision, containerd version, driver or chart pins. Leave those fields unresolved until exported/qualified privately. Generic role names are example identifiers; do not rename live nodes to adopt them. For adoption, reconcile existing ownership/configuration and collect the missing functional evidence before choosing which roles should manage the system.
 
 ## Controller and private contract

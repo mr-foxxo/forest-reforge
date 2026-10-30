@@ -21,7 +21,9 @@ API VIP e Gateway VIP são recursos distintos. Não instale outro controlador de
 
 Verifique Ready e condições, DNS de Pods, comunicação entre nós, políticas permitidas/negadas, saúde Cilium, API pelo VIP e tráfego Gateway desde LAN/VPN. Teste hostname incorreto e autorização. Pods Running não bastam.
 
-O [Den observado](../den-case-study.md) tem cinco control planes/oito workers distribuídos em dois hosts standalone. Verifique membros etcd; a divisão três/dois não tolera igualmente perda de qualquer host. Apenas um terceiro domínio independente permite sustentar um desenho mais resiliente.
+A [Toca observada](../den-case-study.md) tem cinco control planes/oito workers distribuídos em dois hosts standalone. Verifique membros etcd; a divisão três/dois não tolera igualmente perda de qualquer host. Apenas um terceiro domínio independente permite sustentar um desenho mais resiliente.
+
+O [inventário de 30/10/2026](../den-inventory.md) declara recursos para todas as VMs: 14 vCPU nos control planes e 64 nos workers, com nota V100 em core-wk05. RAM sem unidade na fonte não deve substituir quantidades capacity/allocatable em GiB da API Node. Os metadados do inventário de exemplo não redimensionam VMs nem alteram recursos do escalonador.
 
 ## Expansão e recuperação
 

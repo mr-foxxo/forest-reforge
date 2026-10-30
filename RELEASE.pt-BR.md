@@ -6,6 +6,12 @@
 
 O inglês permanece padrão. O pacote inclui `README.pt-BR.md`, `CONTRIBUTING.pt-BR.md`, `RELEASE.pt-BR.md` e os guias adaptados em `docs/pt-BR/`. Os índices [inglês](docs/README.md) e [brasileiro](docs/pt-BR/README.md) relacionam as duas edições. Automação, imagens e arquivos estruturados são compartilhados.
 
+## 30/10/2026 · Conciliação do inventário do operador
+
+Os guias em inglês e português do Brasil agora incluem o inventário genérico atual da infraestrutura e as alocações das treze VMs Kubernetes. A fonte identifica T310/T410 somente de infraestrutura e o NAS PowerEdge 2950, confirma posicionamento e declara 14 vCPU nos control planes mais 64 nos workers, com nota V100 em core-wk05.
+
+O [guia de inventário](docs/pt-BR/den-inventory.md) e sua [versão inglesa](docs/den-inventory.md) preservam os valores RAM sem inventar unidade. JSON e inventário de exemplo compartilham metadados declarados, separados das medições anteriores de capacidade/alocável. Aliases e endereços originais continuam privados. Índices, plataforma/experimentos, módulos e automação são atualizados nos dois idiomas.
+
 ## 28/10/2026 · Evidências da plataforma e automação
 
 A base reúne treze módulos, fases Ansible, helpers operacionais, integração EKS/ECR, diagnóstico Proxmox/GPU/kernel e console DRAC5 isolado. Inclui snapshot genérico do hardware, inventário com cinco control planes e oito workers, comparação de recursos somente para leitura, posicionamento de VMs e duas capturas Grafana originais com manifesto de integridade.

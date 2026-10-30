@@ -24,6 +24,7 @@ English is the default and canonical language. Brazilian Portuguese provides ada
 | Decision register: reconcile before automating | [English](decisions.md) | [pt-BR](pt-BR/decisions.md) |
 | Forest Reforge automation | [English](automation.md) | [pt-BR](pt-BR/automation.md) |
 | The Den: observed platform | [English](den-case-study.md) | [pt-BR](pt-BR/den-case-study.md) |
+| Den inventory and resource allocations | [English](den-inventory.md) | [pt-BR](pt-BR/den-inventory.md) |
 | Den validations and experiments | [English](den-validations-experiments.md) | [pt-BR](pt-BR/den-validations-experiments.md) |
 | R710 + P4: recovered experimental host runbook | [English](r710-p4-vgpu-runbook.md) | [pt-BR](pt-BR/r710-p4-vgpu-runbook.md) |
 | DRAC5 console on Apple Silicon: recovered working path | [English](drac5-apple-silicon-runbook.md) | [pt-BR](pt-BR/drac5-apple-silicon-runbook.md) |

@@ -4,6 +4,8 @@
 
 The infrastructure dashboard set adds ten views to the seven-image hardware/node baseline. Proxmox graph axes and a node-graph tooltip display **2026-10-28**; Grafana panels use their displayed UTC ranges. Each view has its own scope and sampling instant. The [platform record](den-case-study.md) and [machine-readable profile](../examples/observed-platform.json) retain the baseline and these follow-up observations separately.
 
+The [operator inventory reviewed on 2026-10-30](den-inventory.md) confirms placement and adds declared per-VM allocations: 14 control-plane and 64 worker vCPUs. It identifies the T310/T410 infrastructure-only hosts and the V100 note on core-wk05. Its RAM column has no unit; reconcile those declarations with current VM/Node measurements before using them for headroom calculations.
+
 Two screenshots have been reviewed for public use and copied **unchanged** into `assets`. The other eight contain account details, infrastructure addresses, private FQDNs, host aliases or sign-in overlays and remain in private reference storage. Original hashes and alias mapping are recorded privately. The [asset manifest](../assets/evidence.json) records the public images and their checksums.
 
 ## VM placement and failure domains
@@ -52,7 +54,7 @@ The Node (Pods) dashboard selects **core-cp01** and displays:
 | CPU | 2 cores | 2 cores |
 | Memory | 7.76 GiB | 7.66 GiB |
 
-This is now a measured per-node record for one control plane. It does not establish identical sizes for the other twelve nodes. Cilium, Cilium Envoy, etcd, kube-controller-manager and node-feature-discovery component names appear in the selected node's metric series/table.
+This remains a measured per-node record for one control plane. The current inventory now supplies declared allocations for all nodes, including 4 vCPU for core-cp04–05; it does not establish identical measured capacity for the other twelve. Cilium, Cilium Envoy, etcd, kube-controller-manager and node-feature-discovery component names appear in the selected node's metric series/table.
 
 ## Argo CD runtime
 
@@ -75,6 +77,7 @@ The repo-server also has visible CPU/memory series, but its running-pod row is o
 | Area | Recorded result | Next reproducible experiment |
 |---|---|---|
 | Hypervisor placement | All thirteen Kubernetes guests mapped to two standalone hosts | Reconcile VM configuration and etcd membership, then test one host failure in a recovery-backed maintenance window |
+| Inventory/resource reconciliation | Per-VM declared vCPU/RAM values recorded; worker vCPU sum agrees with the earlier 64-CPU dashboard | Resolve the source RAM unit, export current VM configurations and compare exact Node capacity/allocatable quantities |
 | Metrics | Cluster, namespace and selected-node dashboards contain resource series | Save query/filter/time metadata; run a bounded disposable workload and compare before/during/after readings |
 | Argo CD | Component CPU/memory series and five visible running-pod counts | Sync a disposable application in an allowed namespace and prove a forbidden destination is rejected |
 | Backstage / certificates | Namespace CPU/memory series are present; cert-manager workload rows are visible | Record catalog sign-in and rejection, then certificate issuance/renewal and trusted-route checks |

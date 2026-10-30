@@ -23,8 +23,9 @@ O inglês é o idioma padrão e a referência canônica. Esta edição brasileir
 | Compatibilidade de GPUs antigas | [English](../compatibility.md) | [pt-BR](compatibility.md) |
 | Registro de decisões | [English](../decisions.md) | [pt-BR](decisions.md) |
 | Automação do Forest Reforge | [English](../automation.md) | [pt-BR](automation.md) |
-| Den: plataforma observada | [English](../den-case-study.md) | [pt-BR](den-case-study.md) |
-| Validações e experimentos do Den | [English](../den-validations-experiments.md) | [pt-BR](den-validations-experiments.md) |
+| Toca: plataforma observada | [English](../den-case-study.md) | [pt-BR](den-case-study.md) |
+| Inventário da Toca e alocações de recursos | [English](../den-inventory.md) | [pt-BR](den-inventory.md) |
+| Validações e experimentos da Toca | [English](../den-validations-experiments.md) | [pt-BR](den-validations-experiments.md) |
 | R710 com P4: procedimento experimental do host | [English](../r710-p4-vgpu-runbook.md) | [pt-BR](r710-p4-vgpu-runbook.md) |
 | Console DRAC5 no Apple Silicon | [English](../drac5-apple-silicon-runbook.md) | [pt-BR](drac5-apple-silicon-runbook.md) |
 | Solução de problemas por camada | [English](../troubleshooting.md) | [pt-BR](troubleshooting.md) |

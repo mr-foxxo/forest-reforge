@@ -2,13 +2,15 @@
 
 [English (default)](../automation.md) | [Português (Brasil)](automation.md) | [Índice](README.md)
 
+O [inventário revisado em 30/10/2026](den-inventory.md) complementa o [exemplo do tamanho da Toca](../../automation/ansible/inventory.observed.example.yml) com `reforge_inventory_vcpus`, `reforge_inventory_ram_value` e a nota opcional `reforge_inventory_gpu`. `reforge_inventory_ram_unit` continua vazio, pois a fonte não informa unidade. Esses campos são descritivos: não redimensionam convidados, configuram GPUs nem substituem medições anteriores de capacidade/alocável no perfil do checker.
+
 A implementação portátil usa Ansible, configurações de serviços e helpers derivados das fontes do projeto. É uma **implementação proposta com validação offline**, sem certificação de reprodução integral da plataforma. Nenhuma configuração é carregada de `reference/`. Consulte o [mapa das fontes](automation-source-map.md).
 
 Esta edição apresenta o fluxo de trabalho. Antes de aplicar fases, consulte também os contratos detalhados de cada serviço no [guia canônico](../automation.md); as configurações executáveis são compartilhadas pelos dois idiomas.
 
 ## Ambiente existente: primeiro inspecione
 
-O [snapshot do Den](den-case-study.md) registra cinco control planes/oito workers e dois hosts Kubernetes. hv03/hv04 são infraestrutura; não devem entrar em `canopy`. O campo `reforge_hypervisor` informa posicionamento, sem criar ou migrar VMs. A versão kubelet observada não define automaticamente API server, containerd, driver ou chart.
+O [snapshot da Toca](den-case-study.md) registra cinco control planes/oito workers e dois hosts Kubernetes. hv03/hv04 são infraestrutura; não devem entrar em `canopy`. O campo `reforge_hypervisor` informa posicionamento, sem criar ou migrar VMs. A versão kubelet observada não define automaticamente API server, containerd, driver ou chart.
 
 No controlador preparado, faça comparação somente para leitura:
 

@@ -62,6 +62,8 @@ The screenshots reviewed on 2026-10-28 show **five control planes and eight work
 
 Derive expected counts from the intended inventory and refresh evidence with [cluster-resources.py](../scripts/cluster-resources.py), rather than treating the screenshot as a universal baseline. Add nodes in stages: prepare OS/network, join, validate Ready/Cilium/storage, label/taint purpose, test a workload, then allow normal scheduling. The two infrastructure-only hypervisors are not extra cluster nodes or capacity.
 
+The [2026-10-30 inventory](../docs/den-inventory.md) now supplies declared resources for every VM: 14 control-plane and 64 worker vCPUs, with the V100 note on core-wk05. The source RAM unit is unspecified, so keep inventory RAM values separate from Node API capacity/allocatable GiB. Inventory metadata in the Den-sized example does not resize guests or change scheduler resources.
+
 Do not rename joined nodes in place. Drain with workload/PDB awareness, remove/recreate membership using the chosen procedure, and preserve data ownership. Never drain all control planes or all LocalPV owners together.
 
 References: [Cilium L2](https://docs.cilium.io/en/stable/network/l2-announcements/), [kubeadm HA](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/), [kube-vip static pods](https://kube-vip.io/docs/installation/static/).

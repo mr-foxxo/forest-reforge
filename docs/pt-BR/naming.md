@@ -6,7 +6,7 @@
 
 | Recurso | Padrão/exemplo |
 |---|---|
-| Local físico | `den` |
+| Local físico | Toca (identificador técnico: `den`) |
 | Roteador e DNS | `gw01`, `dns01` |
 | Hipervisor e NAS | `hv01`, `hv02`, `nas01` |
 | OOB | `mgmt.hv01.den.int.example.net` |
@@ -23,5 +23,7 @@ Mantenha hostname curto do sistema alinhado ao inventário e FQDN no DNS/configu
 No [snapshot](../../examples/observed-platform.json), hv01/hv02 hospedam Kubernetes; hv03/hv04 são infraestrutura; nas01 fornece armazenamento independente. Esses aliases não criam nós adicionais nem obrigam renomear equipamentos existentes. A relação privada entre alias e máquina fica em `local/den-evidence/`.
 
 O wildcard `*.den.int.example.net` cobre `grafana.den.int.example.net`, mas não `mgmt.hv01.den.int.example.net` nem `api.k8s.den.int.example.net`. Use certificados/SANs específicos.
+
+Na edição brasileira, o local é chamado de **Toca** e o proprietário de **Sr. Raposo**. O identificador técnico `den` permanece em hostnames, domínios, caminhos e configurações compartilhados.
 
 Os nomes de arquivo e recursos permanecem iguais nos dois idiomas. Traduza o texto explicativo; preserve identificadores usados pela automação.

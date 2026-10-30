@@ -4,6 +4,10 @@
 
 Evidence update: 2026-10-28. Repository checks are offline; the separately reviewed screenshot observations are not deployment acceptance.
 
+Inventory reconciliation update: **2026-10-30**. The [paired inventory guides](den-inventory.md) and shared profile now record all thirteen declared VM allocations, platform descriptions and independent infrastructure entries. The RAM unit remains unspecified. English/Portuguese table values and the descriptive YAML metadata are checked against the shared record; earlier measured Node resources are retained separately.
+
+For this update, all 25 tests passed again, the main playbook passed syntax checking with the updated Den-sized inventory, and links/fences passed across 78 English/Portuguese Markdown files. The thirteen allocation rows and role/host totals agree across both language tables, JSON and YAML.
+
 ## Checks performed
 
 - Twenty-five offline tests cover helper behavior, mocked AWS operations, encryption/identity boundaries, YAML/templates, shell syntax and release exclusions; Node quantity parsing, role/placement accounting and drift; plus public-image hashes, PNG structure/metadata and manifest coverage.

@@ -2,7 +2,7 @@
 
 [English (default)](../../../modules/13-spellwork-ai.md) | [Português (Brasil)](13-spellwork-ai.md) | [Índice](../README.md)
 
-**Fluxo proposto de qualificação**, sem promessa de tokens/s, tamanho de modelo ou potência medida no Den. [spellwork-build.sh](../../../scripts/spellwork-build.sh) compila checkout revisado em commit exato; toolkit e revisão precisam preservar os alvos.
+**Fluxo proposto de qualificação**, sem promessa de tokens/s, tamanho de modelo ou potência medida na Toca. [spellwork-build.sh](../../../scripts/spellwork-build.sh) compila checkout revisado em commit exato; toolkit e revisão precisam preservar os alvos.
 
 ## Escolher workload
 

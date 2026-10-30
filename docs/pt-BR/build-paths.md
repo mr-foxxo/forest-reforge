@@ -6,7 +6,7 @@
 |---|---|---|---|
 | Seed | Host estável, DNS/roteador e disco de backup | VMs e laboratório CPU/GPU | Sem alta disponibilidade física |
 | Grove | Vários hosts, gerenciamento isolado e backup externo | Kubernetes, GitOps e portal | Quórum e armazenamento exigem projeto explícito |
-| Skybridge | Grove, contas AWS e acesso VPN/API | Entrega local e EKS pelo Den | Custos e dependências da nuvem |
+| Skybridge | Grove, contas AWS e acesso VPN/API | Entrega local e EKS pelo Toca | Custos e dependências da nuvem |
 
 GPU e AWS são opcionais. Qualifique GPUs em VMs isoladas antes de levar inferência ao Kubernetes.
 

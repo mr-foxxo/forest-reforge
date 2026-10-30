@@ -1,8 +1,10 @@
-# Validações e experimentos do Den
+# Validações e experimentos da Toca
 
 [English (default)](../den-validations-experiments.md) | [Português (Brasil)](den-validations-experiments.md) | [Índice](README.md)
 
 As dez vistas complementares ampliam as sete imagens da base. Eixos Proxmox indicam 28/10/2026; Grafana preserva intervalos UTC próprios. Dois originais revisados estão em assets; as demais vistas têm informações privadas e permanecem locais. O [manifesto](../../assets/evidence.json) registra integridade.
+
+O [inventário revisado em 30/10/2026](den-inventory.md) confirma o posicionamento e acrescenta alocações declaradas: 14 vCPU nos control planes e 64 nos workers. Identifica os hosts T310/T410 somente de infraestrutura e a nota V100 em core-wk05. A coluna RAM não informa unidade; concilie esses valores com configurações atuais das VMs e medições dos Nodes antes de calcular folga.
 
 ## Posicionamento de VMs e domínios de falha
 
@@ -26,7 +28,7 @@ Outro painel de seis horas mostra requests de RAM 27,7 GiB e uso 40,9 GiB; a leg
 
 ## Recursos de um control plane
 
-A vista de core-cp01 exibe 2 CPU capacity/allocatable e memória 7,76/7,66 GiB. Não define tamanho dos outros doze nós. Séries de Cilium, Envoy, etcd, kube-controller-manager e node-feature-discovery demonstram atividade de componentes, sem provar execução GPU.
+A vista de core-cp01 exibe 2 CPU capacity/allocatable e memória 7,76/7,66 GiB. O inventário agora declara recursos para todas as VMs, incluindo 4 vCPU em core-cp04–05; não estabelece medições idênticas para os outros doze nós. Séries de Cilium, Envoy, etcd, kube-controller-manager e node-feature-discovery demonstram atividade de componentes, sem provar execução GPU.
 
 ## Execução do Argo CD
 
@@ -39,6 +41,7 @@ Namespace `argocd`, última hora UTC: server 2 pods, ApplicationSet 2, Redis 1, 
 | Área | Verificação seguinte |
 |---|---|
 | Hosts/etcd | Reconciliar configurações/membros, testar falha em janela com backup |
+| Inventário/recursos | Confirmar unidade da RAM, exportar configurações atuais das VMs e comparar capacidade/alocável exatos dos Nodes |
 | Métricas | Reproduzir queries e executar carga limitada com limites de parada |
 | Argo | Commit descartável, destino proibido, autenticação e rollback |
 | GPU | Identidade PCI, driver, alocação, licença e kernels CUDA/modelo |

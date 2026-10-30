@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "evidence_level": "screenshot-observed",
-  "reviewed_on": "2026-10-28",
+  "evidence_level": "screenshot-observed and operator-inventory",
+  "reviewed_on": "2026-10-30",
   "captured_at": null,
   "capture_time_note": "The supplied screenshots do not establish an absolute capture date.",
   "hypervisors": [
@@ -17,7 +17,12 @@
       "root_disk_used_gib": 32.96,
       "kernel": "7.0.14-5-pve",
       "pve_manager_version": "9.2.4",
-      "boot_mode": "Legacy BIOS"
+      "boot_mode": "Legacy BIOS",
+      "inventory_platform": {
+        "description": "Dell PowerEdge R710",
+        "source_kind": "operator-maintained inventory",
+        "reviewed_on": "2026-10-30"
+      }
     },
     {
       "id": "hv02",
@@ -32,7 +37,12 @@
       "root_disk_used_gib": 14.5,
       "kernel": "7.0.14-16-pve",
       "pve_manager_version": "9.2.18",
-      "boot_mode": "EFI"
+      "boot_mode": "EFI",
+      "inventory_platform": {
+        "description": "Dual-socket X99 platform",
+        "source_kind": "operator-maintained inventory",
+        "reviewed_on": "2026-10-30"
+      }
     },
     {
       "id": "hv03",
@@ -46,7 +56,12 @@
       "root_disk_used_gib": 8.63,
       "kernel": "7.0.2-6-pve",
       "pve_manager_version": "9.2.2",
-      "boot_mode": "Legacy BIOS"
+      "boot_mode": "Legacy BIOS",
+      "inventory_platform": {
+        "description": "Dell PowerEdge T310",
+        "source_kind": "operator-maintained inventory",
+        "reviewed_on": "2026-10-30"
+      }
     },
     {
       "id": "hv04",
@@ -60,7 +75,12 @@
       "root_disk_used_gib": 14.56,
       "kernel": "7.0.2-6-pve",
       "pve_manager_version": "9.2.2",
-      "boot_mode": "Legacy BIOS"
+      "boot_mode": "Legacy BIOS",
+      "inventory_platform": {
+        "description": "Dell PowerEdge T410",
+        "source_kind": "operator-maintained inventory",
+        "reviewed_on": "2026-10-30"
+      }
     }
   ],
   "nas": {
@@ -94,7 +114,12 @@
       }
     ],
     "redundancy_validated": false,
-    "backup_restore_validated": false
+    "backup_restore_validated": false,
+    "inventory_platform": {
+      "description": "Dell PowerEdge 2950",
+      "source_kind": "operator-maintained inventory",
+      "reviewed_on": "2026-10-30"
+    }
   },
   "kubernetes": {
     "kubelet_version": "v1.36.4",
@@ -183,6 +208,135 @@
         "capacity": 880
       },
       "memory_display_tolerance_gib": 0.1
+    },
+    "declared_vm_allocations": {
+      "source_kind": "operator-maintained inventory",
+      "reviewed_on": "2026-10-30",
+      "ram_unit": null,
+      "scope_note": "Declared VM allocations. The source RAM column does not state a unit; these values are not Kubernetes capacity or allocatable measurements.",
+      "nodes": [
+        {
+          "id": "core-cp01",
+          "role": "control_plane",
+          "hypervisor": "hv01",
+          "vcpus": 2,
+          "ram_value": 8
+        },
+        {
+          "id": "core-cp02",
+          "role": "control_plane",
+          "hypervisor": "hv01",
+          "vcpus": 2,
+          "ram_value": 8
+        },
+        {
+          "id": "core-cp03",
+          "role": "control_plane",
+          "hypervisor": "hv01",
+          "vcpus": 2,
+          "ram_value": 8
+        },
+        {
+          "id": "core-wk01",
+          "role": "workers",
+          "hypervisor": "hv01",
+          "vcpus": 4,
+          "ram_value": 24
+        },
+        {
+          "id": "core-wk02",
+          "role": "workers",
+          "hypervisor": "hv01",
+          "vcpus": 4,
+          "ram_value": 24
+        },
+        {
+          "id": "core-wk03",
+          "role": "workers",
+          "hypervisor": "hv01",
+          "vcpus": 4,
+          "ram_value": 16
+        },
+        {
+          "id": "core-wk04",
+          "role": "workers",
+          "hypervisor": "hv01",
+          "vcpus": 4,
+          "ram_value": 16
+        },
+        {
+          "id": "core-cp04",
+          "role": "control_plane",
+          "hypervisor": "hv02",
+          "vcpus": 4,
+          "ram_value": 8
+        },
+        {
+          "id": "core-cp05",
+          "role": "control_plane",
+          "hypervisor": "hv02",
+          "vcpus": 4,
+          "ram_value": 8
+        },
+        {
+          "id": "core-wk05",
+          "role": "workers",
+          "hypervisor": "hv02",
+          "vcpus": 16,
+          "ram_value": 24,
+          "gpu_inventory_note": "Tesla V100"
+        },
+        {
+          "id": "core-wk06",
+          "role": "workers",
+          "hypervisor": "hv02",
+          "vcpus": 8,
+          "ram_value": 16
+        },
+        {
+          "id": "core-wk07",
+          "role": "workers",
+          "hypervisor": "hv02",
+          "vcpus": 16,
+          "ram_value": 24
+        },
+        {
+          "id": "core-wk08",
+          "role": "workers",
+          "hypervisor": "hv02",
+          "vcpus": 8,
+          "ram_value": 8
+        }
+      ],
+      "totals": {
+        "control_plane": {
+          "nodes": 5,
+          "vcpus": 14,
+          "ram_value": 40
+        },
+        "workers": {
+          "nodes": 8,
+          "vcpus": 64,
+          "ram_value": 152
+        },
+        "all_nodes": {
+          "nodes": 13,
+          "vcpus": 78,
+          "ram_value": 192
+        },
+        "by_hypervisor": {
+          "hv01": {
+            "nodes": 7,
+            "vcpus": 22,
+            "ram_value": 104
+          },
+          "hv02": {
+            "nodes": 6,
+            "vcpus": 56,
+            "ram_value": 88
+          }
+        }
+      }
     }
   },
   "not_validated_by_screenshots": [
@@ -192,7 +346,7 @@
     "physical_host_failover_and_etcd_quorum_recovery",
     "network_identity_tls_and_cloud_authorization_acceptance",
     "application_data_and_off_host_backup_restore",
-    "complete_per_node_resource_allocations_beyond_the_selected_core_cp01_view"
+    "current_exact_node_api_capacities_beyond_the_selected_core_cp01_view"
   ],
   "evidence_sets": [
     {
@@ -209,6 +363,12 @@
         "assets/cluster_resources.png",
         "assets/workloads.png"
       ]
+    },
+    {
+      "id": "operator-inventory",
+      "reviewed_on": "2026-10-30",
+      "source_kind": "operator-maintained inventory",
+      "publication": "Generic platform descriptions, VM allocations and placement; original host aliases and addresses remain private."
     }
   ],
   "dashboard_observations": {
@@ -287,6 +447,42 @@
       "templates": 1,
       "storage_total_tib": 3.24,
       "storage_used_tib": 1.07
+    }
+  },
+  "inventory_infrastructure": {
+    "reviewed_on": "2026-10-30",
+    "network": [
+      {
+        "id": "gw01",
+        "description": "Banana Pi R3 gateway/firewall",
+        "zone": "Boundary"
+      },
+      {
+        "id": "dns01",
+        "description": "Raspberry Pi 4 infrastructure",
+        "zone": "Infra"
+      }
+    ],
+    "oob": [
+      {
+        "id": "mgmt.hv01",
+        "parent": "hv01",
+        "type": "IPMI"
+      },
+      {
+        "id": "mgmt.hv02",
+        "parent": "hv02",
+        "type": "IPMI/KVM"
+      }
+    ],
+    "management_entry": {
+      "id": "mgmt01",
+      "type": null,
+      "parent": null,
+      "zone": null,
+      "vcpus": null,
+      "ram_value": null,
+      "scope_note": "Listed separately in the inventory; type, parent and resource fields are blank."
     }
   }
 }

@@ -1,12 +1,15 @@
 ---
-# Screenshot-sized example with observed placement expressed as generic metadata.
+# Den-sized example with placement and declared VM allocations as generic metadata.
 # All addresses are documentation-only. Never run bootstrap against an existing
 # cluster just to compare evidence: use scripts/cluster-resources.py instead.
 # reforge_hypervisor records placement; it does not provision or migrate a VM.
+# reforge_inventory_* fields document the 2026-10-30 operator inventory only.
+# RAM has no unit in the source; these fields do not resize guests or set Node capacity.
 all:
   vars:
     ansible_user: platform
     reforge_inventory_reviewed: false
+    reforge_inventory_ram_unit: ""
   children:
     burrows:
       children:
@@ -32,38 +35,48 @@ all:
           hosts:
             core-cp01:
               reforge_hypervisor: hv01
+              reforge_inventory_vcpus: 2
+              reforge_inventory_ram_value: 8
               ansible_host: 192.0.2.21
               reforge_node_ip: 192.0.2.21
               reforge_node_interface: ens18
             core-cp02:
               reforge_hypervisor: hv01
+              reforge_inventory_vcpus: 2
+              reforge_inventory_ram_value: 8
               ansible_host: 192.0.2.22
               reforge_node_ip: 192.0.2.22
               reforge_node_interface: ens18
             core-cp03:
               reforge_hypervisor: hv01
+              reforge_inventory_vcpus: 2
+              reforge_inventory_ram_value: 8
               ansible_host: 192.0.2.23
               reforge_node_ip: 192.0.2.23
               reforge_node_interface: ens18
             core-cp04:
               reforge_hypervisor: hv02
+              reforge_inventory_vcpus: 4
+              reforge_inventory_ram_value: 8
               ansible_host: 192.0.2.24
               reforge_node_ip: 192.0.2.24
               reforge_node_interface: ens18
             core-cp05:
               reforge_hypervisor: hv02
+              reforge_inventory_vcpus: 4
+              reforge_inventory_ram_value: 8
               ansible_host: 192.0.2.25
               reforge_node_ip: 192.0.2.25
               reforge_node_interface: ens18
         workers:
           hosts:
-            core-wk01: {ansible_host: 192.0.2.31, reforge_node_ip: 192.0.2.31, reforge_hypervisor: hv01}
-            core-wk02: {ansible_host: 192.0.2.32, reforge_node_ip: 192.0.2.32, reforge_hypervisor: hv01}
-            core-wk03: {ansible_host: 192.0.2.33, reforge_node_ip: 192.0.2.33, reforge_hypervisor: hv01}
-            core-wk04: {ansible_host: 192.0.2.34, reforge_node_ip: 192.0.2.34, reforge_hypervisor: hv01}
-            core-wk05: {ansible_host: 192.0.2.35, reforge_node_ip: 192.0.2.35, reforge_hypervisor: hv02}
-            core-wk06: {ansible_host: 192.0.2.36, reforge_node_ip: 192.0.2.36, reforge_hypervisor: hv02}
-            core-wk07: {ansible_host: 192.0.2.37, reforge_node_ip: 192.0.2.37, reforge_hypervisor: hv02}
-            core-wk08: {ansible_host: 192.0.2.38, reforge_node_ip: 192.0.2.38, reforge_hypervisor: hv02}
+            core-wk01: {ansible_host: 192.0.2.31, reforge_node_ip: 192.0.2.31, reforge_hypervisor: hv01, reforge_inventory_vcpus: 4, reforge_inventory_ram_value: 24}
+            core-wk02: {ansible_host: 192.0.2.32, reforge_node_ip: 192.0.2.32, reforge_hypervisor: hv01, reforge_inventory_vcpus: 4, reforge_inventory_ram_value: 24}
+            core-wk03: {ansible_host: 192.0.2.33, reforge_node_ip: 192.0.2.33, reforge_hypervisor: hv01, reforge_inventory_vcpus: 4, reforge_inventory_ram_value: 16}
+            core-wk04: {ansible_host: 192.0.2.34, reforge_node_ip: 192.0.2.34, reforge_hypervisor: hv01, reforge_inventory_vcpus: 4, reforge_inventory_ram_value: 16}
+            core-wk05: {ansible_host: 192.0.2.35, reforge_node_ip: 192.0.2.35, reforge_hypervisor: hv02, reforge_inventory_vcpus: 16, reforge_inventory_ram_value: 24, reforge_inventory_gpu: Tesla V100}
+            core-wk06: {ansible_host: 192.0.2.36, reforge_node_ip: 192.0.2.36, reforge_hypervisor: hv02, reforge_inventory_vcpus: 8, reforge_inventory_ram_value: 16}
+            core-wk07: {ansible_host: 192.0.2.37, reforge_node_ip: 192.0.2.37, reforge_hypervisor: hv02, reforge_inventory_vcpus: 16, reforge_inventory_ram_value: 24}
+            core-wk08: {ansible_host: 192.0.2.38, reforge_node_ip: 192.0.2.38, reforge_hypervisor: hv02, reforge_inventory_vcpus: 8, reforge_inventory_ram_value: 8}
     names:
       hosts: {}

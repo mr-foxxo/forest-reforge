@@ -8,7 +8,7 @@
 
 Forest Reforge reúne um guia prático e ferramentas de configuração para transformar servidores corporativos usados, aceleradores passivos NVIDIA Tesla, equipamentos de rede acessíveis e um rack doméstico em uma plataforma de máquinas virtuais, Kubernetes, inteligência artificial e serviços conectados à AWS.
 
-Nascido no **Den de Mr. Foxxo**, parte da Enchanted Forest Inc., o projeto percorre: montagem e refrigeração → validação do hardware → redes isoladas → virtualização → Kubernetes → identidade → GitOps → nuvem → recuperação.
+Nascido na **Toca do Sr. Raposo**, parte da Enchanted Forest Inc., o projeto percorre: montagem e refrigeração → validação do hardware → redes isoladas → virtualização → Kubernetes → identidade → GitOps → nuvem → recuperação.
 
 O inglês é o idioma padrão. Esta edição em português do Brasil oferece guias adaptados para consulta e implantação; os documentos correspondentes em inglês preservam o detalhamento integral. Comandos, identificadores e arquivos de configuração são compartilhados pelos dois idiomas.
 
@@ -20,7 +20,7 @@ O inglês é o idioma padrão. Esta edição em português do Brasil oferece gui
 4. Siga os módulos na ordem abaixo, validando cada camada antes de avançar.
 5. Execute os [testes de aceitação e recuperação](docs/pt-BR/acceptance.md).
 
-O [índice em português](docs/pt-BR/README.md) reúne todos os guias, módulos e exemplos. O [guia de automação](docs/pt-BR/automation.md) explica inventários, entradas privadas, fases e responsabilidades. Use o [inventário inicial](automation/ansible/inventory.example.yml) ou o [inventário do tamanho do Den](automation/ansible/inventory.observed.example.yml), escolhendo endereços, credenciais e versões no ambiente privado.
+O [índice em português](docs/pt-BR/README.md) reúne todos os guias, módulos e exemplos. O [guia de automação](docs/pt-BR/automation.md) explica inventários, entradas privadas, fases e responsabilidades. Use o [inventário inicial](automation/ansible/inventory.example.yml) ou o [inventário do tamanho da Toca](automation/ansible/inventory.observed.example.yml), escolhendo endereços, credenciais e versões no ambiente privado.
 
 ## O que você pode construir
 
@@ -28,14 +28,14 @@ O [índice em português](docs/pt-BR/README.md) reúne todos os guias, módulos 
 - Hosts Proxmox com atualização recuperável e uma estratégia explícita de passthrough ou vGPU.
 - Cluster kubeadm com Cilium, kube-vip, Gateway API, TLS, armazenamento local e observabilidade.
 - Portal Backstage com identidade GitHub e Cloudflare Access.
-- Argo CD local para aplicações do Den e destinos AWS EKS separados.
+- Argo CD local para aplicações da Toca e destinos AWS EKS separados.
 - Ambiente de computação com GPUs antigas e registros reproduzíveis de workloads e benchmarks.
 
 ```mermaid
 flowchart TD
   Hardware["Servidores reutilizados e GPUs Tesla"] --> Compute["Proxmox"]
   Network["OpenWrt e DNS independente"] --> Compute
-  Compute --> Core["Kubernetes do Den"]
+  Compute --> Core["Kubernetes da Toca"]
   Core --> Portal["Backstage e serviços da plataforma"]
   Git["GitHub e GitOps"] --> Argo["Argo CD"]
   Argo --> Core
@@ -63,13 +63,15 @@ flowchart TD
 
 ## Hardware e compatibilidade
 
-O ambiente de origem inclui R710 com dois X5690 e P4, um host X99 com V100, capacidade adicional M40, Banana Pi R3, Raspberry Pi 4 e switches separados. O X5690 não possui AVX; refrigeração, risers, instruções da CPU e versões dos drivers fazem parte da validação.
+O ambiente de origem inclui R710 com dois X5690 e P4, um host X99 com V100, hipervisores de infraestrutura Dell PowerEdge T310/T410, NAS PowerEdge 2950, capacidade adicional M40, Banana Pi R3, Raspberry Pi 4 e switches separados. T310/T410 não hospedam nós Kubernetes. O X5690 não possui AVX; refrigeração, risers, instruções da CPU e versões dos drivers fazem parte da validação.
 
 Consulte a [matriz de compatibilidade](docs/pt-BR/compatibility.md) antes de comprar ou instalar. Suporte à GPU, kernel, driver, sistema convidado, toolkit CUDA, framework e kernels da aplicação precisam funcionar como uma única combinação.
 
 ## Plataforma e evidências
 
-O [registro do Den](docs/pt-BR/den-case-study.md) e o [snapshot estruturado](examples/observed-platform.json) documentam o ambiente observado. A revisão de 28/10/2026 registra quatro hipervisores Proxmox e um NAS TrueNAS; apenas dois hipervisores hospedam os nós Kubernetes. São cinco control planes e oito workers Ready com kubelet v1.36.4. O painel restrito aos workers mostra 64 CPU e 124,1 GiB de RAM alocável.
+O [registro da Toca](docs/pt-BR/den-case-study.md) e o [snapshot estruturado](examples/observed-platform.json) documentam o ambiente observado. A revisão de 28/10/2026 registra quatro hipervisores Proxmox e um NAS TrueNAS; apenas dois hipervisores hospedam os nós Kubernetes. São cinco control planes e oito workers Ready com kubelet v1.36.4. O painel restrito aos workers mostra 64 CPU e 124,1 GiB de RAM alocável.
+
+A [revisão do inventário em 30/10/2026](docs/pt-BR/den-inventory.md) acrescenta alocações declaradas para as treze VMs: 14 vCPU nos control planes e 64 nos workers, com nota Tesla V100 em core-wk05. A coluna RAM da fonte não informa unidade; seus valores são preservados separadamente das medições em GiB. O guia apresenta plataformas, infraestrutura/OOB, posicionamento e conciliação dos recursos nos dois idiomas.
 
 Esses números não comprovam restauração, execução de modelos ou tolerância à perda de qualquer host. O [registro de validações e experimentos](docs/pt-BR/den-validations-experiments.md) distingue observações e próximos testes. O [relatório de validação](docs/pt-BR/package-validation.md) descreve verificações do repositório, sintaxe Ansible, templates e empacotamento.
 

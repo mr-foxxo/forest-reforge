@@ -6,6 +6,8 @@ Helpers: [host audit](../scripts/host-audit.sh), [selected-GPU diagnosis](../scr
 
 The [reviewed hardware snapshot](../docs/den-case-study.md) now supplies CPU models, displayed usable RAM, kernels and boot modes for four hypervisors plus NAS state. It separates two Kubernetes guest hosts from two infrastructure-only hosts. These observations improve sizing; they do not establish final DIMM population, sustained memory stability, chassis power qualification or GPU workload results.
 
+The [current operator inventory](../docs/den-inventory.md) identifies hv03 as a Dell PowerEdge T310, hv04 as a T410 and nas01 as a PowerEdge 2950. The T310/T410 remain integrated infrastructure outside Kubernetes hosting. Keep those platform descriptions separate from the earlier measured host RAM and GPU workload records.
+
 ## R710 case
 
 The available history reports an R710 revision II, dual Xeon X5690, dual 870 W PSUs, iDRAC6 Enterprise, Riser 2 x16 and one installed Tesla P4. A second P4 was available. This is a source-reported configuration, not a vendor validation of every R710/GPU combination.

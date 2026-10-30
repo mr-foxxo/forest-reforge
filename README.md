@@ -12,7 +12,7 @@ Born in **Mr. Foxxo’s den**, part of Enchanted Forest Inc., it follows the who
 
 Match each machine to useful work, record the configuration and results, and keep a clear recovery path.
 
-> **Platform and automation · 2026-10-28.** Built from the operating Den platform and backed by recorded evidence, automated tests, Ansible syntax checks and rendered configuration checks. Explore the [Den platform record](docs/den-case-study.md), [validations and experiments](docs/den-validations-experiments.md), [validation report](docs/package-validation.md) and [setup guide](docs/automation.md).
+> **Platform and inventory · 2026-10-30.** Built from the operating Den platform and backed by recorded evidence, an updated operator inventory, automated tests, Ansible syntax checks and rendered configuration checks. Explore the [Den platform](docs/den-case-study.md), [inventory allocations](docs/den-inventory.md), [validations and experiments](docs/den-validations-experiments.md) and [setup guide](docs/automation.md).
 
 ## What you can build
 
@@ -76,6 +76,8 @@ Choose the smaller [new-build inventory](automation/ansible/inventory.example.ym
 |---|---|---|
 | Dell PowerEdge R710, dual X5690 | Foundational virtualization and Tesla P4 integration | CPU instruction set, risers and cooling matter |
 | Dual-socket X99 host | Larger compute host, Tesla V100 | Qualify mixed memory before software debugging |
+| Dell PowerEdge T310 / T410 | Integrated infrastructure hypervisors outside Kubernetes hosting | Keep infrastructure membership separate from cluster capacity |
+| Dell PowerEdge 2950 | Independent NAS platform | Record storage health and recovery separately |
 | NVIDIA Tesla P4 | Compact Pascal compute | Official vGPU support ends at branch 16 |
 | NVIDIA Tesla V100 | Volta compute | Current AI packages can still exclude it |
 | NVIDIA Tesla M40 | Additional Maxwell compute capacity | No official NVIDIA vGPU support; evaluate passthrough |
@@ -92,6 +94,7 @@ The [Den platform record](docs/den-case-study.md) and [machine-readable snapshot
 |---|---|
 | Physical infrastructure | Four Proxmox hypervisors and a TrueNAS system across 17 reviewed source views |
 | Runtime and placement | Thirteen guests mapped across two standalone hosts; cluster and Argo workload screenshots versioned in assets |
+| Operator inventory · 2026-10-30 | Thirteen VM allocations, 14 control-plane/64 worker vCPUs, and a V100 note on core-wk05 recorded with separate inventory provenance |
 | Kubernetes nodes | Five control planes and eight workers, all showing Ready at kubelet v1.36.4 |
 | Worker resources | 64 CPU and 124.1 GiB allocatable RAM in the worker-scoped dashboard |
 | Automated tests | Passing tests cover helpers, resource accounting, placement consistency, public image integrity, privacy, configuration and packaging |
@@ -101,6 +104,8 @@ The [Den platform record](docs/den-case-study.md) and [machine-readable snapshot
 Two hypervisors host Kubernetes guests; two remain integrated infrastructure hosts. The [Den-sized inventory](automation/ansible/inventory.observed.example.yml) preserves this distinction. The [decision register](docs/decisions.md) explains configuration choices, and the [acceptance guide](docs/acceptance.md) provides the checks for maintaining and extending your installation.
 
 The [validation and experiment ledger](docs/den-validations-experiments.md) presents the observed host split, monitoring, Argo runtime and discovery-layer results with [public dashboard screenshots](assets/README.md). Each experiment records its scope and the next reproducible check.
+
+The [current inventory guide](docs/den-inventory.md) lists every VM and reconciles declared resources with measured Node values. The shared record preserves the source RAM values without assigning a unit, and keeps them separate from the earlier GiB dashboard readings.
 
 Public configurations use role-based names, example addresses and private input files. The release packager includes the guides, automation, tests and license while keeping raw reference material, inventories and runtime credentials private.
 
