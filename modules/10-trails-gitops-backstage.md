@@ -1,5 +1,7 @@
 # 10 · Trails — GitOps and developer portal
 
+[English (default)](10-trails-gitops-backstage.md) | [Português (Brasil)](../docs/pt-BR/modules/10-trails-gitops-backstage.md) | [Documentation index](../docs/README.md)
+
 The [versioned Argo runtime screenshot](../docs/den-validations-experiments.md#argo-cd-runtime) shows component CPU/memory metrics and running-pod counts, including two server and two ApplicationSet pods. This complements the configuration contracts below with runtime evidence. Application sync, destination rejection and sign-in outcomes belong in the corresponding functional records.
 
 Automation: `trails` supplies Argo projects/root application and optional GitHub Dex; `backstage` supplies configuration, app and route. The [automation guide](../docs/automation.md) defines image, database and ownership contracts.

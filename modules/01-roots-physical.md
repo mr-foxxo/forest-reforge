@@ -1,5 +1,7 @@
 # 01 · Roots — physical datacenter
 
+[English (default)](01-roots-physical.md) | [Português (Brasil)](../docs/pt-BR/modules/01-roots-physical.md) | [Documentation index](../docs/README.md)
+
 **Status:** topology and hardware families are source-reported; rack construction details are a proposed reproducible procedure. No dimensions, cutting list, photographs, breaker ratings or measured loads were supplied.
 
 ## Before building the rack

@@ -1,5 +1,7 @@
 # 04 · Names — DNS and TLS
 
+[English (default)](04-names-dns-tls.md) | [Português (Brasil)](../docs/pt-BR/modules/04-names-dns-tls.md) | [Documentation index](../docs/README.md)
+
 Automation: `names` configures dedicated DNS; `gatehouse` installs DNS-01 TLS and the shared HTTPS Gateway. See the [phase guide](../docs/automation.md).
 
 ## Namespace and authority

@@ -1,5 +1,7 @@
 # Public evidence images
 
+[English (default)](README.md) | [Português (Brasil)](../docs/pt-BR/assets/README.md) | [Documentation index](../docs/README.md)
+
 These two original dashboard screenshots were individually reviewed and copied unchanged from the private evidence set. They contain resource metrics and standard platform component names. Private account information, hostnames, addresses and sign-in overlays in the other source views remain outside the versioned/public assets.
 
 | Asset | Scope | Documentation |

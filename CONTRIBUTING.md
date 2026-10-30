@@ -1,12 +1,14 @@
 # Contributing to Forest Reforge
 
+[English (default)](CONTRIBUTING.md) | [Português (Brasil)](CONTRIBUTING.pt-BR.md) | [Documentation index](docs/README.md)
+
 Contributions make reused hardware easier to configure, operate and recover. Describe the concrete problem, the resulting behavior, the versions involved, how you checked the change and how to reverse it.
 
 ## Follow the project conventions
 
 Read the relevant [module](README.md#the-modules), [naming conventions](docs/naming.md), [decision register](docs/decisions.md) and [automation guide](docs/automation.md) before changing a configuration contract. Keep changes focused and update the associated example and guide together.
 
-Write documentation in English. Use role-based hostnames, example domains, documentation addresses and dummy account IDs in public files. Keep private inventory, credentials, raw evidence and runtime artifacts in the ignored `local/` or `reference/` trees. Keep secrets out of command output, diffs, screenshots and pull-request descriptions.
+English is the default and canonical documentation language. Maintain Brazilian Portuguese alternatives alongside English updates: root documents use the `.pt-BR.md` suffix, guides live in `docs/pt-BR/`, and modules, examples and asset documentation use matching subdirectories there. Preserve technical identifiers, executable examples and existing English paths; share scripts, configuration and images between languages. Brazilian Portuguese guides may be adapted and more concise, but must retain prerequisites, limitations and technical meaning. Update language selectors and both [English](docs/README.md) and [Brazilian Portuguese](docs/pt-BR/README.md) indexes together. See [CONTRIBUTING.pt-BR.md](CONTRIBUTING.pt-BR.md) for the Portuguese workflow. Use role-based hostnames, example domains, documentation addresses and dummy account IDs in public files. Keep private inventory, credentials, raw evidence and runtime artifacts in the ignored `local/` or `reference/` trees. Keep secrets out of command output, diffs, screenshots and pull-request descriptions.
 
 For screenshots, review both visible content and embedded metadata before copying publishable originals into `assets`. Register public evidence images and their SHA-256 values in [assets/evidence.json](assets/evidence.json), and link them from the relevant record with the dashboard scope/time range. Keep private originals and alias mappings separately. Follow [the current evidence examples](assets/README.md); preserve measured pixels and identify any future redacted derivative explicitly.
 

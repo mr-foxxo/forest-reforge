@@ -1,5 +1,7 @@
 # OpenWrt rule patterns — inspect and adapt first
 
+[English (default)](openwrt-rules.md) | [Português (Brasil)](../docs/pt-BR/examples/openwrt-rules.md) | [Documentation index](../docs/README.md)
+
 These are UCI section patterns, not an executable migration. Replace zone names with inspected names. `wg-paws-access` is a conceptual access plane, not necessarily the zone's literal identifier. The router's paws zone needs input ACCEPT or narrowly enumerated router management services. The human admin zone needs input REJECT except deliberately required router-local functions.
 
 ```uci

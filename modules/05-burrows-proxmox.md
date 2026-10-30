@@ -1,5 +1,7 @@
 # 05 · Burrows — hypervisors and guest foundations
 
+[English (default)](05-burrows-proxmox.md) | [Português (Brasil)](../docs/pt-BR/modules/05-burrows-proxmox.md) | [Documentation index](../docs/README.md)
+
 Automation: `burrows` prepares the selected bootloader's IOMMU settings; [proxmox-vm.sh](../scripts/proxmox-vm.sh) imports a checked image into a new stopped guest. Read the [private contract and recovery requirements](../docs/automation.md) first.
 
 ## Install and separate concerns

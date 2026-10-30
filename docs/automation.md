@@ -1,5 +1,7 @@
 # Forest Reforge automation
 
+[English (default)](automation.md) | [Português (Brasil)](pt-BR/automation.md) | [Documentation index](README.md)
+
 This iteration adds portable Ansible roles, service configurations and operational helpers derived from the supplied on-prem implementation and both chat exports. It is a **proposed implementation with offline validation**, not a deployed-stack record. Nothing loads configuration from `reference/`. The [source map](automation-source-map.md) records the design choices carried forward.
 
 ## Existing platform: inspect before changing

@@ -1,5 +1,7 @@
 # Validated stack record
 
+[English (default)](validated-stack.md) | [Português (Brasil)](../docs/pt-BR/examples/validated-stack.md) | [Documentation index](../docs/README.md)
+
 **Operational evidence is recorded per component.** The [platform snapshot](observed-platform.json) establishes host/node fields and now includes VM placement, selected core-cp01 resources, Argo runtime metrics and discovery-component activity. The [experiment ledger](../docs/den-validations-experiments.md) links those observations to the next functional checks. Fill the driver checksums, guest/runtime versions, CUDA/model and recovery results for each GPU/host/workload tuple; keep its evidence specific to the tested combination.
 
 ```yaml

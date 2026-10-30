@@ -1,5 +1,7 @@
 # The Den: observed platform
 
+[English (default)](den-case-study.md) | [Português (Brasil)](pt-BR/den-case-study.md) | [Documentation index](README.md)
+
 Reviewed **2026-10-28** from the initial seven-image baseline and ten follow-up infrastructure views, plus the owner's clarification of infrastructure membership. The baseline images lack an absolute capture time; follow-up graph axes display 2026-10-28. Hardware/software values below retain their source-view scope. Role-based IDs replace private hostnames. Two clean dashboard originals are versioned under [assets](../assets/README.md); private views and alias/hash provenance remain local.
 
 The follow-up [validations and experiment ledger](den-validations-experiments.md) adds observed VM placement, standalone Proxmox topology, cluster/namespace metrics, a selected control-plane resource view, and Argo CD workload counts with public screenshots.

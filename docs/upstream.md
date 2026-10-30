@@ -1,5 +1,7 @@
 # Upstream references
 
+[English (default)](upstream.md) | [Português (Brasil)](pt-BR/upstream.md) | [Documentation index](README.md)
+
 Compatibility research date: 2026-10-27. These links are authoritative entry points, not guarantees that a future version retains today's behavior. Record the exact release or commit used in every reproduction.
 
 ## GPU and hypervisor (checked)

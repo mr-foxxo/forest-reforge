@@ -1,5 +1,7 @@
 # Legacy GPU compatibility matrix
 
+[English (default)](compatibility.md) | [Português (Brasil)](pt-BR/compatibility.md) | [Documentation index](README.md)
+
 Checked against the linked primary documentation on **2026-10-27**. These are upstream limits and qualification guidance, not lab benchmark results.
 
 | GPU | Architecture / CUDA CC | Official NVIDIA vGPU branch ceiling | Practical first experiment |

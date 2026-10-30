@@ -1,5 +1,7 @@
 # Reference-to-automation map
 
+[English (default)](automation-source-map.md) | [Português (Brasil)](pt-BR/automation-source-map.md) | [Documentation index](README.md)
+
 This map records how the supplied material informs the generic implementation. All new automation uses `reforge_*` variables, role-based hostnames, example domains, documentation-only IPs and dummy account IDs. No original inventory, vault, application artifact or private API label is imported. The source tree stays local and is excluded from the release helper.
 
 | Evidence | Portable implementation | Deliberate boundary |

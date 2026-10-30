@@ -1,5 +1,7 @@
 # Package validation
 
+[English (default)](package-validation.md) | [Português (Brasil)](pt-BR/package-validation.md) | [Documentation index](README.md)
+
 Evidence update: 2026-10-28. Repository checks are offline; the separately reviewed screenshot observations are not deployment acceptance.
 
 ## Checks performed

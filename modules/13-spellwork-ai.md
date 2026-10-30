@@ -1,5 +1,7 @@
 # 13 · Spellwork — AI on older compute
 
+[English (default)](13-spellwork-ai.md) | [Português (Brasil)](../docs/pt-BR/modules/13-spellwork-ai.md) | [Documentation index](../docs/README.md)
+
 Helper: [spellwork-build.sh](../scripts/spellwork-build.sh) builds a reviewed checkout at an exact commit with explicit GPU and legacy CPU options. A compatible toolkit/revision is required; see the [automation guide](../docs/automation.md).
 
 **Proposed qualification workflow.** No tokens/sec, model-size promise or measured power result is claimed for the originating den.

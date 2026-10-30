@@ -1,5 +1,7 @@
 # DRAC5 console on Apple Silicon: recovered working path
 
+[English (default)](drac5-apple-silicon-runbook.md) | [Português (Brasil)](pt-BR/drac5-apple-silicon-runbook.md) | [Documentation index](README.md)
+
 ## Confirmed versus proposed
 
 The September 12 export contains actual controller responses, JAR listings and `file` output. The owner confirmed VNC worked, then confirmed enabling the keyboard option worked. The final credential-only Playwright fetcher was proposed in an earlier ZIP, but that ZIP's bytes were not attached here and the chat contains no later successful automation test.

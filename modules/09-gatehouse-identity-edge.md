@@ -1,5 +1,7 @@
 # 09 · Gatehouse — identity and external access
 
+[English (default)](09-gatehouse-identity-edge.md) | [Português (Brasil)](../docs/pt-BR/modules/09-gatehouse-identity-edge.md) | [Documentation index](../docs/README.md)
+
 Automation: `gatehouse`, `trails`, `backstage` and `edge` configure TLS, separate identities and the Backstage-first tunnel. Follow the [integration prerequisites and rejection tests](../docs/automation.md).
 
 ## Baseline

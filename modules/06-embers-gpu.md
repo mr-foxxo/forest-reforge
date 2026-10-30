@@ -1,5 +1,7 @@
 # 06 · Embers — make legacy acceleration useful
 
+[English (default)](06-embers-gpu.md) | [Português (Brasil)](../docs/pt-BR/modules/06-embers-gpu.md) | [Documentation index](../docs/README.md)
+
 Helpers: `embers` installs selected prerequisites; [gpu-diagnose.sh](../scripts/gpu-diagnose.sh), [kernel-gate.sh](../scripts/kernel-gate.sh), [gpu-driver.sh](../scripts/gpu-driver.sh) and [vgpu-attach.sh](../scripts/vgpu-attach.sh) support qualification. See the [automation guide](../docs/automation.md).
 
 Read [the compatibility matrix](../docs/compatibility.md) first. Choose a single card and a single workload before constructing a shared GPU platform.

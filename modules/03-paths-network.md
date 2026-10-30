@@ -1,5 +1,7 @@
 # 03 · Paths — physical segmentation and WireGuard
 
+[English (default)](03-paths-network.md) | [Português (Brasil)](../docs/pt-BR/modules/03-paths-network.md) | [Documentation index](../docs/README.md)
+
 ## Proposed canonical map
 
 | BPi port | Zone | Example subnet | Connection |

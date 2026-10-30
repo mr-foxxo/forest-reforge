@@ -1,5 +1,7 @@
 # 12 · Lookout — operate and recover
 
+[English (default)](12-lookout-operations.md) | [Português (Brasil)](../docs/pt-BR/modules/12-lookout-operations.md) | [Documentation index](../docs/README.md)
+
 Automation: `lookout` installs monitoring and optional logging/secrets controllers; `backup` schedules [etcd-backup.sh](../scripts/etcd-backup.sh). [cluster-troubleshoot.sh](../scripts/cluster-troubleshoot.sh) collects layer-specific conditions without Secret contents. See the [recovery guide](../docs/automation.md).
 
 The [Den validations and experiments](../docs/den-validations-experiments.md) now include versioned Grafana cluster and Argo workload screenshots, plus observed VM placement and a selected-node resource view. Record each panel's selector, time range, units and query separately from the earlier worker-only dashboard. [cluster-resources.py](../scripts/cluster-resources.py) refreshes Node counts/readiness/capacity without reading workloads or Secrets; it does not collect dashboard queries. NAS ONLINE status and green scrub indicators remain separate from an independent restore result.

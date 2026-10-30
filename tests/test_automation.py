@@ -85,8 +85,11 @@ class Helpers(unittest.TestCase):
             folder = pathlib.Path(directory)
             for name in ("assets", "docs", "examples", "modules", "scripts", "automation", "tests"):
                 (folder / name).mkdir()
-            for name in ("README.md", "CONTRIBUTING.md", "RELEASE.md", "LICENSE", ".gitignore"):
+            for name in ("README.md", "README.pt-BR.md", "CONTRIBUTING.md", "CONTRIBUTING.pt-BR.md",
+                         "RELEASE.md", "RELEASE.pt-BR.md", "LICENSE", ".gitignore"):
                 (folder / name).write_text("public\n")
+            (folder / "docs/pt-BR").mkdir()
+            (folder / "docs/pt-BR/README.md").write_text("Índice em português\n")
             script = folder / "scripts/package-release.sh"
             script.write_text((ROOT / "scripts/package-release.sh").read_text())
             (folder / "assets/public-evidence.png").write_bytes(b"PUBLIC_ASSET_FIXTURE")
@@ -100,6 +103,10 @@ class Helpers(unittest.TestCase):
             result = subprocess.run(["bash", str(script), str(archive)], text=True, capture_output=True)
             self.assertEqual(result.returncode, 0, result.stderr)
             with tarfile.open(archive) as package:
+                for name in ("README.pt-BR.md", "CONTRIBUTING.pt-BR.md", "RELEASE.pt-BR.md",
+                             "docs/pt-BR/README.md"):
+                    self.assertEqual(package.extractfile("forest-reforge/" + name).read(),
+                                     (folder / name).read_bytes())
                 self.assertEqual(package.extractfile("forest-reforge/LICENSE").read(), (folder / "LICENSE").read_bytes())
                 self.assertEqual(package.extractfile("forest-reforge/assets/public-evidence.png").read(), b"PUBLIC_ASSET_FIXTURE")
                 for member in package.getmembers():

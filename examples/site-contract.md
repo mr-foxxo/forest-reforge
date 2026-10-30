@@ -1,5 +1,7 @@
 # Site contract template
 
+[English (default)](site-contract.md) | [Português (Brasil)](../docs/pt-BR/examples/site-contract.md) | [Documentation index](../docs/README.md)
+
 **Proposed example, not the originating site's asserted live inventory.** Replace all values deliberately before using snippets. `example.net` cannot be used to obtain your own ACME certificate.
 
 ```yaml

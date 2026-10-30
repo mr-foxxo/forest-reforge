@@ -1,5 +1,7 @@
 # R710 + P4: recovered experimental host runbook
 
+[English (default)](r710-p4-vgpu-runbook.md) | [Português (Brasil)](pt-BR/r710-p4-vgpu-runbook.md) | [Documentation index](README.md)
+
 ## Evidence and scope
 
 The newly supplied July 22 chat records the owner's R710 revision II, dual 870 W PSUs, successful CPU replacement with X5690s, P4 installed in Riser 2's x16 slot, no other additional expansion card, and the deliberate requirement to explore Proxmox 9.2 with a 7.x kernel. This extends the earlier 9.1 trouble history; it does not prove a 9.1 installation used the same tuple.

@@ -1,5 +1,7 @@
 # Forest Reforge
 
+[English (default)](README.md) | [Português (Brasil)](README.pt-BR.md) | [Documentation index](docs/README.md)
+
 ### Retired hardware. Modern infrastructure. A second life, engineered.
 
 **Build a hybrid datacenter from the machines the industry left behind.**
@@ -33,6 +35,10 @@ flowchart TD
   Argo --> AWS["Forest and FoxByte EKS"]
   Edge["Cloudflare Access and Tunnel"] --> Portal
 ```
+
+## Documentation languages
+
+English is the default. Read the [Brazilian Portuguese overview](README.pt-BR.md) and its [documentation index](docs/pt-BR/README.md) for adapted Portuguese guides. The [English index](docs/README.md) lists every guide and its Portuguese counterpart. Scripts, configuration and evidence assets are shared.
 
 ## Start here
 

@@ -1,5 +1,7 @@
 # Decision register: reconcile before automating
 
+[English (default)](decisions.md) | [Português (Brasil)](pt-BR/decisions.md) | [Documentation index](README.md)
+
 These decisions govern the generic guides. Historical files preserve conflicting statements under an archive warning.
 
 | Topic | Conflicting evidence | Canonical documentation choice |

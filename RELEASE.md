@@ -1,5 +1,11 @@
 # Release notes
 
+[English (default)](RELEASE.md) | [Português (Brasil)](RELEASE.pt-BR.md) | [Documentation index](docs/README.md)
+
+## Bilingual documentation
+
+English remains the default. Releases also include `README.pt-BR.md`, `CONTRIBUTING.pt-BR.md`, `RELEASE.pt-BR.md` and adapted Brazilian Portuguese guides under `docs/pt-BR/`. The [English](docs/README.md) and [Portuguese](docs/pt-BR/README.md) indexes link every paired document. Executable examples, automation and evidence assets remain shared.
+
 ## 2026-10-28 · Platform evidence and automation
 
 Forest Reforge combines thirteen infrastructure modules with phased configuration, operational helpers and a documented Den platform. Public examples follow the project's naming conventions and use generic addresses and private configuration inputs.
@@ -45,7 +51,7 @@ shasum -a 256 dist/forest-reforge-2026-10-28.tar.gz > dist/forest-reforge-2026-1
 tar -tzf dist/forest-reforge-2026-10-28.tar.gz
 ```
 
-The packager includes `README.md`, `CONTRIBUTING.md`, `RELEASE.md`, `LICENSE`, guides, examples, assets, modules, scripts, automation and tests. It excludes raw references, private runtime files, local configuration, IDE state, virtual environments and bytecode. It refuses to overwrite an existing archive. Review the member list and checksum before publishing the release.
+The packager includes `README.md`, `CONTRIBUTING.md`, `RELEASE.md`, their `.pt-BR.md` alternatives, `LICENSE`, guides, examples, assets, modules, scripts, automation and tests. It excludes raw references, private runtime files, local configuration, IDE state, virtual environments and bytecode. It refuses to overwrite an existing archive. Review the member list and checksum before publishing the release.
 
 ### License
 

@@ -1,5 +1,7 @@
 # 11 · Skybridge — AWS accounts and hybrid delivery
 
+[English (default)](11-skybridge-aws.md) | [Português (Brasil)](../docs/pt-BR/modules/11-skybridge-aws.md) | [Documentation index](../docs/README.md)
+
 Helpers: [eks-access.sh](../scripts/eks-access.sh), [eks-register.sh](../scripts/eks-register.sh), [ecr-refresh.sh](../scripts/ecr-refresh.sh) and [IAM examples](../automation/aws/deployer-trust.example.json). Read the [runtime identity and explicit-target requirements](../docs/automation.md) first.
 
 ## Scope supported by the sources

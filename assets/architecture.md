@@ -1,5 +1,7 @@
 # Forest Reforge diagram assets
 
+[English (default)](architecture.md) | [Português (Brasil)](../docs/pt-BR/assets/architecture.md) | [Documentation index](../docs/README.md)
+
 These source-native Mermaid assets render on GitHub. They are deliberately Markdown rather than fabricated rack photographs or generated logos.
 
 ## Trust and delivery topology

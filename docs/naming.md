@@ -1,5 +1,7 @@
 # Project and resource naming
 
+[English (default)](naming.md) | [Português (Brasil)](pt-BR/naming.md) | [Documentation index](README.md)
+
 **Forest Reforge** describes reusing capable hardware through careful engineering. It connects the Forest identity with the practical act of rebuilding. The repository slug is `forest-reforge`; no uniqueness/trademark claim is made.
 
 Use role-based names in portable examples and friendly aliases in local descriptions.

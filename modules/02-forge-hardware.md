@@ -1,5 +1,7 @@
 # 02 · Forge — qualify the hardware
 
+[English (default)](02-forge-hardware.md) | [Português (Brasil)](../docs/pt-BR/modules/02-forge-hardware.md) | [Documentation index](../docs/README.md)
+
 Helpers: [host audit](../scripts/host-audit.sh), [selected-GPU diagnosis](../scripts/gpu-diagnose.sh) and the [isolated DRAC5 viewer](../automation/drac5/compose.yml). See the [automation guide](../docs/automation.md) for private inputs and limitations.
 
 The [reviewed hardware snapshot](../docs/den-case-study.md) now supplies CPU models, displayed usable RAM, kernels and boot modes for four hypervisors plus NAS state. It separates two Kubernetes guest hosts from two infrastructure-only hosts. These observations improve sizing; they do not establish final DIMM population, sustained memory stability, chassis power qualification or GPU workload results.

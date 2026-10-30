@@ -1,5 +1,7 @@
 # Build paths and dependency gates
 
+[English (default)](build-paths.md) | [Português (Brasil)](pt-BR/build-paths.md) | [Documentation index](README.md)
+
 ## Choose a scope
 
 | Path | Minimum | Useful result | Limits |

@@ -1,5 +1,7 @@
 # Den validations and experiments
 
+[English (default)](den-validations-experiments.md) | [Português (Brasil)](pt-BR/den-validations-experiments.md) | [Documentation index](README.md)
+
 The infrastructure dashboard set adds ten views to the seven-image hardware/node baseline. Proxmox graph axes and a node-graph tooltip display **2026-10-28**; Grafana panels use their displayed UTC ranges. Each view has its own scope and sampling instant. The [platform record](den-case-study.md) and [machine-readable profile](../examples/observed-platform.json) retain the baseline and these follow-up observations separately.
 
 Two screenshots have been reviewed for public use and copied **unchanged** into `assets`. The other eight contain account details, infrastructure addresses, private FQDNs, host aliases or sign-in overlays and remain in private reference storage. Original hashes and alias mapping are recorded privately. The [asset manifest](../assets/evidence.json) records the public images and their checksums.

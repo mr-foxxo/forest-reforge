@@ -1,5 +1,7 @@
 # 08 · Vault — storage and secrets
 
+[English (default)](08-vault-storage-secrets.md) | [Português (Brasil)](../docs/pt-BR/modules/08-vault-storage-secrets.md) | [Documentation index](../docs/README.md)
+
 Automation: `vault` installs LocalPV with a non-default Retain class; `baseline` configures namespace boundaries; [secret-file.sh](../scripts/secret-file.sh) bootstraps private credentials. ESO is opt-in through `lookout`. See the [phase and ownership guide](../docs/automation.md).
 
 ## Storage choices

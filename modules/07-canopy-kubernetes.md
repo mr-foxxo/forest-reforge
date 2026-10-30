@@ -1,5 +1,7 @@
 # 07 · Canopy — Kubernetes foundation
 
+[English (default)](07-canopy-kubernetes.md) | [Português (Brasil)](../docs/pt-BR/modules/07-canopy-kubernetes.md) | [Documentation index](../docs/README.md)
+
 ## Prerequisites
 
 Stable hardware and VM identity; non-overlapping node/pod/service CIDRs; working time and DNS; routed access; an API VIP reserved outside DHCP; independent recovery. Select exact Kubernetes, containerd, kube-vip, Gateway API CRD and Cilium versions from their mutual support matrices. Archive their values/configurations before upgrade.

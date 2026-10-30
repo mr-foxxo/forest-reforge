@@ -13,7 +13,7 @@ stage=$(mktemp -d)
 trap 'rm -rf -- "$stage"' EXIT
 mkdir "$stage/forest-reforge"
 # Explicit public roots only. Never archive the workspace wholesale.
-for item in README.md CONTRIBUTING.md RELEASE.md LICENSE assets docs examples modules scripts automation tests; do
+for item in README.md README.pt-BR.md CONTRIBUTING.md CONTRIBUTING.pt-BR.md RELEASE.md RELEASE.pt-BR.md LICENSE assets docs examples modules scripts automation tests; do
   rsync -a --exclude='private/' --exclude='.env' --exclude='__pycache__/' --exclude='.DS_Store' \
     --exclude='*.pyc' --exclude='*.retry' -- "$root/$item" "$stage/forest-reforge/"
 done

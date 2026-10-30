@@ -1,5 +1,7 @@
 # Architecture and evidence
 
+[English (default)](architecture.md) | [Português (Brasil)](pt-BR/architecture.md) | [Documentation index](README.md)
+
 ## Boundaries
 
 Forest Reforge separates the physical facility, management plane, workload plane and cloud control plane. This makes it possible to replace a GPU or rebuild Kubernetes without also losing DNS, router administration and recovery access.

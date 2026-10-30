@@ -1,5 +1,7 @@
 # Physical build record
 
+[English (default)](physical-build-record.md) | [Português (Brasil)](../docs/pt-BR/examples/physical-build-record.md) | [Documentation index](../docs/README.md)
+
 Copy privately per rack/site. Blank fields are deliberately unknown.
 
 | Field | Measurement / evidence |
